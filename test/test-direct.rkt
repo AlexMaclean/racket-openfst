@@ -1,6 +1,6 @@
 #lang racket
 
-(require "open-fst-abstract.rkt" "open-fst-direct.rkt")
+(require "../open-fst-direct.rkt")
 
 ;; A vector FST is a general mutable FST
 (define fst (make-fst))
@@ -30,26 +30,3 @@
 (define fst2 (fst-read "test.fst"))
 (fst-num-states fst2)
 (fst-num-arcs fst2 0)
-
-(define fst3 (fst-accept "this string is a test"))
-(fst-num-states fst3)
-(fst->string fst3)
-
-(define p (fst-shortest-path fst 1))
-
-(fst->string p)
-p
-
-(define fst4 (fst-union (fst-accept "test") (fst-accept "hello")))
-
-(fst-shortest-path fst4)
-fst3
-
-(define f5 (fst-cross (fst-accept "hello") (fst-accept "world")))
-(define f6 (fst-cross (fst-accept "world") (fst-accept "123")))
-(define f7 (fst-compose f5 f6))
-
-(fst->string (fst-shortest-path f7))
-
-(define f8 (fst-concat (fst-accept "A") (fst-accept "B") (fst-accept "C")))
-(fst->string (fst-shortest-path f8))

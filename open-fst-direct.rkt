@@ -1,45 +1,23 @@
-#lang racket
+#lang racket/base
 
-(provide (all-defined-out))
+(require racket/contract "open-fst-raw.rkt")
 
-(require "open-fst-raw.rkt")
+(define natural? (and/c integer? (not/c negative?)))
 
-(define (make-fst) (new-VectorFst))
-
-(define (fst-add-state! fst)
-    (VectorFst-AddState fst))
-
-(define (fst-add-states! fst n)
- (VectorFst-AddStates fst n))
-
-(define (fst-num-states fst)
- (VectorFst-NumStates fst))
-
-(define (fst-num-arcs fst state)
- (VectorFst-NumArcs fst state))
-
-(define (fst-add-arc! fst state arc)
- (VectorFst-AddArc fst state arc))
-
-(define (fst-set-start! fst state)
-    (VectorFst-SetStart fst state))
-
-(define (fst-set-final! fst state weight)
-    (VectorFst-SetFinal fst state weight))
-
-(define (fst-start fst)
- (Fst-Start fst))
-
-(define (fst-final fst state)
-(Fst-Final fst state))
-
-(define (fst-input-symbols fst)
- (Fst-InputSymbols fst))
-
-(define (fst-output-symbols fst)
- (Fst-OutputSymbols fst))
-
-(define make-arc new-Arc)
+(provide/contract
+    [rename new-VectorFst make-fst (-> FST?)]
+    [rename VectorFst-AddState fst-add-state! (FST? . -> . natural?)]
+    [rename VectorFst-AddStates fst-add-states! (FST? natural? . -> . void?)]
+    [rename VectorFst-NumStates fst-num-states (FST? . -> . natural?)]
+    [rename VectorFst-NumArcs fst-num-arcs (FST? natural? . -> . natural?)]
+    [rename VectorFst-AddArc fst-add-arc! (FST? natural? FST-Arc? . -> . void?)]
+    [rename VectorFst-SetStart fst-set-start! (FST? natural? . -> . void?)]
+    [rename VectorFst-SetFinal fst-set-final! (FST? natural? real? . -> . void?)]
+    [rename Fst-Start fst-start (FST? . -> . natural?)]
+    [rename Fst-Final fst-weight (FST? natural? . -> . real?)]
+    [rename Fst-InputSymbols fst-input-symbols (FST? . -> . any/c)]
+    [rename Fst-OutputSymbols fst-output-symbols (FST? . -> . any/c)]
+    [rename new-Arc make-arc (natural? natural? real? natural?  . -> . FST-Arc?)])
 
 ;; Helper Functions
 

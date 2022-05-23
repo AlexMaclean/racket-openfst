@@ -1,13 +1,16 @@
 #lang racket/base
 
-(require ffi/unsafe ffi/unsafe/define ffi/unsafe/define/conventions)
+(require ffi/unsafe ffi/unsafe/define ffi/unsafe/define/conventions
+  (rename-in racket/contract (-> ->/c)))
 
-(define wrapper-library (ffi-lib "openfst_wrapper"))
+(define wrapper-library (ffi-lib "lib/openfst_wrapper"))
 (define-ffi-definer define-fst wrapper-library
   #:provide provide-protected
   #:make-c-id convention:hyphen->underscore)
 
 ;; Types
+
+(provide/contract [FST? (->/c any/c boolean?)] [FST-Arc? (->/c any/c boolean?)])
 
 (struct FST (pointer))
 (struct FST-Arc (pointer))
