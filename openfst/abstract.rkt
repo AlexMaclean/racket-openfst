@@ -1,6 +1,6 @@
 #lang racket/base
 
-(require "open-fst-raw.rkt" racket/contract racket/match)
+(require "wrapper.rkt" racket/contract racket/match)
 
 (define fst-like? (or/c string? FST?))
 

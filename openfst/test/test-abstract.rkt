@@ -1,6 +1,6 @@
 #lang racket
 
-(require "../open-fst-abstract.rkt")
+(require "../abstract.rkt")
 
 
 (define fst3 (fst-accept "this string is a test"))

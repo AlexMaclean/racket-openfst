@@ -1,12 +1,12 @@
 #lang racket/base
 
-(require "open-fst-abstract.rkt" racket/contract)
+(require "abstract.rkt" racket/contract)
 
 (provide/contract
  [fst-add-weight (fst-like? real? . -> . FST?)]
  [fst-insert     ((fst-like?) (#:weight real?) . ->* . FST?)]
  [fst-delete     ((fst-like?) (#:weight real?) . ->* . FST?)]
- [fst-join       (fst-like? fst-like? . -> . FST?)])
+ #;[fst-join       (fst-like? fst-like? . -> . FST?)])
 
 (define (fst-add-weight fst weight)
   (fst-concat (fst-accept "" #:weight weight) fst))
@@ -23,5 +23,5 @@
         (fst-add-weight result weight)
         result)))
 
-(define (fst-join exp sep)
-  (fst-concat exp (fst-closure (fst-concat sep exp))))
+; (define (fst-join exp sep)
+;   (fst-concat exp (fst-closure (fst-concat sep exp))))

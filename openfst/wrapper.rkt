@@ -1,9 +1,16 @@
 #lang racket/base
 
-(require ffi/unsafe ffi/unsafe/define ffi/unsafe/define/conventions
+(require ffi/unsafe ffi/unsafe/define ffi/unsafe/define/conventions setup/collection-search
          (rename-in racket/contract (-> ->/c)))
 
-(define wrapper-library (ffi-lib "lib/openfst_wrapper"))
+(define wrapper-library
+  (or
+    (collection-search '(lib "openfst/lib")
+      #:combine (lambda (_ path)
+          (ffi-lib (build-path path "openfst_wrapper") #:fail (lambda () #f)))
+      #:break? (lambda (x) x))
+    (ffi-lib "lib/openfst_wrapper")))
+
 (define-ffi-definer define-fst wrapper-library
   #:provide provide-protected
   #:make-c-id convention:hyphen->underscore)

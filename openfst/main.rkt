@@ -1,6 +1,6 @@
 #lang racket/base
 
-(require racket/contract racket/match "open-fst-raw.rkt")
+(require racket/contract racket/match "wrapper.rkt")
 
 (define natural? (and/c exact-integer? (not/c negative?)))
 (define label? (or/c natural? char?))
