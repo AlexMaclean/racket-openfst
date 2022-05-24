@@ -1,4 +1,4 @@
- #include <fst/fstlib.h>
+#include <fst/fstlib.h>
 
 using namespace fst;
 
@@ -68,8 +68,8 @@ extern "C" {
         return new fst::StdArc(ilabel, olabel, weight, dest);
     }
 
-    fst::StdFst *new_ProjectFst(fst::StdFst *fst, ProjectType projectType) {
-        return new StdProjectFst(*fst, projectType);
+    fst::StdMutableFst *Fst_Project(fst::StdFst *fst, ProjectType projectType) {
+        return new StdVectorFst(StdProjectFst(*fst, projectType));
     }
 
     size_t SymbolTable_NumSymbols(const SymbolTable *table) {
@@ -140,6 +140,12 @@ extern "C" {
 
     fst::StdMutableFst *Fst_Concat(fst::StdMutableFst *ifst1, fst::StdMutableFst *ifst2) {
         return new StdVectorFst(StdConcatFst(*ifst1, *ifst2));
+    }
+
+    fst::StdMutableFst *Fst_Difference(fst::StdMutableFst *ifst1, fst::StdMutableFst *ifst2) {
+        StdVectorFst *ofst = new StdVectorFst();
+        Difference(*ifst1, *ifst2, ofst);
+        return ofst;
     }
 
 }

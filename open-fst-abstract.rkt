@@ -14,6 +14,8 @@
     [fst-compose ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]
     [fst-concat ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]
     [fst-accept ((string?) (#:weight real?) . ->* . FST?)]
+    [fst-difference (fst-like? fst-like? . -> . FST?)]
+    [fst-project (fst-like? (or/c 'input 'output) . -> . FST?)]
     [fst-like (fst-like? . -> . FST?)])
 
 (provide fst-like?)
@@ -45,10 +47,18 @@
 (define (fst-write fst path)
     (Fst-Write (fst-like fst) path))
 
+(define (fst-difference fst1 fst2)
+    (Fst-Difference (fst-like fst1) (fst-like fst2)))
+
+(define (fst-project fst project-type)
+    (Fst-Project (fst-like fst) (match project-type
+         ['input 'PROJECT_INPUT]
+         ['output 'PROJECT_OUTPUT])))
+
 ;; Misc.
 
 (define (fst-like arg)
-    (if (string? arg) (fst->string arg) arg))
+    (if (string? arg) (fst-accept arg) arg))
 
 ;; Helper Functions
 

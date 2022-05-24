@@ -24,6 +24,8 @@
 
 (define _StateId _int)
 
+(define _ProjectType (_enum '(PROJECT_INPUT PROJECT_OUTPUT)))
+
 ;; Functions
 
 (define-fst new-VectorFst       (_fun -> _Fst))
@@ -62,3 +64,5 @@
 (define-fst Fst-Compose (_fun _Fst _Fst -> _Fst))
 (define-fst Fst-Cross (_fun _Fst _Fst -> _Fst))
 (define-fst Fst-Concat (_fun _Fst _Fst -> _Fst))
+(define-fst Fst-Difference (_fun _Fst _Fst -> _Fst))
+(define-fst Fst-Project (_fun _Fst _ProjectType -> _Fst))

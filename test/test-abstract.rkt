@@ -18,5 +18,10 @@ fst3
 
 (fst->string (fst-shortest-path f7))
 
-(define f8 (fst-concat (fst-accept "A") (fst-accept "B") (fst-accept "C")))
+(define f8 (fst-concat "A" "B" "C"))
 (fst->string (fst-shortest-path f8))
+
+(define f9 (fst-cross "hello" "world"))
+
+(fst->string (fst-project f9 'input))
+(fst->string (fst-project f9 'output))
