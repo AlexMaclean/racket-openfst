@@ -7,3 +7,4 @@ compiled/
 *.so
 *.fst
 *.far
+*.bak

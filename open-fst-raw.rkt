@@ -1,7 +1,7 @@
 #lang racket/base
 
 (require ffi/unsafe ffi/unsafe/define ffi/unsafe/define/conventions
-  (rename-in racket/contract (-> ->/c)))
+         (rename-in racket/contract (-> ->/c)))
 
 (define wrapper-library (ffi-lib "lib/openfst_wrapper"))
 (define-ffi-definer define-fst wrapper-library
@@ -10,7 +10,9 @@
 
 ;; Types
 
-(provide/contract [FST? (->/c any/c boolean?)] [FST-Arc? (->/c any/c boolean?)])
+(provide/contract
+ [FST? (->/c any/c boolean?)]
+ [FST-Arc? (->/c any/c boolean?)])
 
 (struct FST (pointer))
 (struct FST-Arc (pointer))
@@ -60,9 +62,10 @@
 
 (define-fst Fst-ShortestPath (_fun _Fst _int32 -> _Fst))
 
-(define-fst Fst-Union (_fun _Fst _Fst -> _Fst))
-(define-fst Fst-Compose (_fun _Fst _Fst -> _Fst))
-(define-fst Fst-Cross (_fun _Fst _Fst -> _Fst))
-(define-fst Fst-Concat (_fun _Fst _Fst -> _Fst))
+(define-fst Fst-Union      (_fun _Fst _Fst -> _Fst))
+(define-fst Fst-Compose    (_fun _Fst _Fst -> _Fst))
+(define-fst Fst-Cross      (_fun _Fst _Fst -> _Fst))
+(define-fst Fst-Concat     (_fun _Fst _Fst -> _Fst))
 (define-fst Fst-Difference (_fun _Fst _Fst -> _Fst))
+
 (define-fst Fst-Project (_fun _Fst _ProjectType -> _Fst))
