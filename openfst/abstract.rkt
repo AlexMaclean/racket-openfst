@@ -20,6 +20,9 @@
 
 (provide fst-like? FST?)
 
+;; Functions
+;; ----------------------------------------------------------------------------
+
 (define compiler (new-StringCompiler))
 (define printer (new-StringPrinter))
 
@@ -51,16 +54,16 @@
   (Fst-Difference (fst-like fst1) (fst-like fst2)))
 
 (define (fst-project fst project-type)
-  (Fst-Project (fst-like fst) (match project-type
-                                ['input 'PROJECT_INPUT]
-                                ['output 'PROJECT_OUTPUT])))
-
-;; Misc.
+  (Fst-Project (fst-like fst)
+               (match project-type
+                 ['input 'PROJECT_INPUT]
+                 ['output 'PROJECT_OUTPUT])))
 
 (define (fst-like arg)
   (if (string? arg) (fst-accept arg) arg))
 
 ;; Helper Functions
+;; ----------------------------------------------------------------------------
 
 (define (repeated-apply binary-fun arg-list)
   (match arg-list

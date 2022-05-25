@@ -8,6 +8,9 @@
  [fst-delete     ((fst-like?) (#:weight real?) . ->* . FST?)]
  #;[fst-join       (fst-like? fst-like? . -> . FST?)])
 
+;; Functions
+;; ----------------------------------------------------------------------------
+
 (define (fst-add-weight fst weight)
   (fst-concat (fst-accept "" #:weight weight) fst))
 

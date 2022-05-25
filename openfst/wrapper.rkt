@@ -3,19 +3,27 @@
 (require ffi/unsafe ffi/unsafe/define ffi/unsafe/define/conventions setup/collection-search
          (rename-in racket/contract (-> ->/c)))
 
+;; Library
+;; ----------------------------------------------------------------------------
+
 (define wrapper-library
   (or
-    (collection-search '(lib "openfst/lib")
-      #:combine (lambda (_ path)
-          (ffi-lib (build-path path "openfst_wrapper") #:fail (lambda () #f)))
-      #:break? (lambda (x) x))
-    (ffi-lib "lib/openfst_wrapper")))
+   (collection-search
+    '(lib "openfst/lib")
+    #:combine
+    (λ (_ path)
+      (ffi-lib (build-path path "openfst_wrapper")
+               #:fail (λ () #f)))
+    #:break?
+    (λ (x) x))
+   (ffi-lib "lib/openfst_wrapper")))
 
 (define-ffi-definer define-fst wrapper-library
   #:provide provide-protected
   #:make-c-id convention:hyphen->underscore)
 
 ;; Types
+;; ----------------------------------------------------------------------------
 
 (provide/contract
  [FST? (->/c any/c boolean?)]
@@ -39,6 +47,7 @@
 (define _ProjectType (_enum '(PROJECT_INPUT PROJECT_OUTPUT)))
 
 ;; Functions
+;; ----------------------------------------------------------------------------
 
 (define-fst new-VectorFst       (_fun -> _Fst))
 (define-fst new-VectorFst-copy  (_fun _Fst -> _Fst))

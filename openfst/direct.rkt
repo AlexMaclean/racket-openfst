@@ -22,19 +22,22 @@
  [fst-states (FST? . -> . (stream/c natural?))]
  [fst-arcs (FST? natural? . -> . (stream/c FST-Arc?))])
 
+;; Functions
+;; ----------------------------------------------------------------------------
+
 (define (make-arc ilabel olabel weight dest)
   (new-Arc (label ilabel) (label olabel) weight dest))
 
 (define (fst-states fst)
   (iterator->stream (new-StateIterator fst) StateIterator-Value
-    StateIterator-Done StateIterator-Next))
+                    StateIterator-Done StateIterator-Next))
 
 (define (fst-arcs fst state)
   (iterator->stream (new-ArcIterator fst state) ArcIterator-Value
-    ArcIterator-Done ArcIterator-Next))
-
+                    ArcIterator-Done ArcIterator-Next))
 
 ;; Helper Functions
+;; ----------------------------------------------------------------------------
 
 (define (label l)
   (match l
@@ -49,9 +52,7 @@
 (define (iterator->stream iter value done? next!)
   (define (first) (value iter))
   (define (rest)
-    (if (done? iter)
-      empty-stream
-      (begin (next! iter) (stream-cons (first) (rest)))))
-        (if (done? iter)
-      empty-stream
-    (stream-cons (first) (rest))))
+    (if (done? iter) empty-stream
+        (begin (next! iter) (stream-cons (first) (rest)))))
+  (if (done? iter) empty-stream
+      (stream-cons (first) (rest))))
