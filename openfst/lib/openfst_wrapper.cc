@@ -64,10 +64,6 @@ extern "C" {
         return fst->OutputSymbols();
     }
 
-    fst::StdArc *new_Arc(int ilabel, int olabel, float weight, int dest) {
-        return new fst::StdArc(ilabel, olabel, weight, dest);
-    }
-
     fst::StdMutableFst *Fst_Project(fst::StdFst *fst, ProjectType projectType) {
         return new StdVectorFst(StdProjectFst(*fst, projectType));
     }
@@ -146,6 +142,58 @@ extern "C" {
         StdVectorFst *ofst = new StdVectorFst();
         Difference(*ifst1, *ifst2, ofst);
         return ofst;
+    }
+
+    fst::StdArc *new_Arc(int ilabel, int olabel, float weight, int dest) {
+        return new fst::StdArc(ilabel, olabel, weight, dest);
+    }
+
+    int Arc_ilabel(fst::StdArc *arc) {
+        return arc->ilabel;
+    }
+
+    int Arc_olabel(fst::StdArc *arc) {
+        return arc->olabel;
+    }
+
+    int Arc_weight(fst::StdArc *arc) {
+        return arc->weight.Value();
+    }
+
+    int Arc_nextstate(fst::StdArc *arc) {
+        return arc->nextstate;
+    }
+
+    fst::StateIterator<fst::StdFst> *new_StateIterator(fst::StdMutableFst *fst) {
+        return new StateIterator<fst::StdFst>(*fst);
+    }
+
+    int StateIterator_Value(fst::StateIterator<fst::StdFst> *siter) {
+        return siter->Value();
+    }
+
+    void StateIterator_Next(fst::StateIterator<fst::StdFst> *siter) {
+        siter->Next();
+    }
+
+    bool StateIterator_Done(fst::StateIterator<fst::StdFst> *siter) {
+        return siter->Done();
+    }
+
+    fst::ArcIterator<fst::StdFst> *new_ArcIterator(fst::StdMutableFst *fst, int state) {
+        return new ArcIterator<fst::StdFst>(*fst, state);
+    }
+
+    fst::StdArc *ArcIterator_Value(fst::ArcIterator<fst::StdFst> *aiter) {
+        return new fst::StdArc(aiter->Value());
+    }
+
+    void ArcIterator_Next(fst::ArcIterator<fst::StdFst> *aiter) {
+        aiter->Next();
+    }
+
+    bool ArcIterator_Done(fst::ArcIterator<fst::StdFst> *aiter) {
+        return aiter->Done();
     }
 
 }

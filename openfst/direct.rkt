@@ -1,6 +1,6 @@
 #lang racket/base
 
-(require racket/contract racket/match "wrapper.rkt")
+(require racket/contract racket/match racket/stream "wrapper.rkt")
 
 (define natural? (and/c exact-integer? (not/c negative?)))
 (define label? (or/c natural? char?))
@@ -18,10 +18,21 @@
  [rename Fst-Final fst-weight (FST? natural? . -> . real?)]
  [rename Fst-InputSymbols fst-input-symbols (FST? . -> . any/c)]
  [rename Fst-OutputSymbols fst-output-symbols (FST? . -> . any/c)]
- [make-arc (label? label? real? natural?  . -> . FST-Arc?)])
+ [make-arc (label? label? real? natural?  . -> . FST-Arc?)]
+ [fst-states (FST? . -> . (stream/c natural?))]
+ [fst-arcs (FST? natural? . -> . (stream/c FST-Arc?))])
 
 (define (make-arc ilabel olabel weight dest)
   (new-Arc (label ilabel) (label olabel) weight dest))
+
+(define (fst-states fst)
+  (iterator->stream (new-StateIterator fst) StateIterator-Value
+    StateIterator-Done StateIterator-Next))
+
+(define (fst-arcs fst state)
+  (iterator->stream (new-ArcIterator fst state) ArcIterator-Value
+    ArcIterator-Done ArcIterator-Next))
+
 
 ;; Helper Functions
 
@@ -34,3 +45,13 @@
   (for/hash ([pos (in-range (SymbolTable-NumSymbols SymbolTable))])
     (let ([key (SymbolTable-GetNthKey SymbolTable pos)])
       (values key (SymbolTable-Find SymbolTable key)))))
+
+(define (iterator->stream iter value done? next!)
+  (define (first) (value iter))
+  (define (rest)
+    (if (done? iter)
+      empty-stream
+      (begin (next! iter) (stream-cons (first) (rest)))))
+        (if (done? iter)
+      empty-stream
+    (stream-cons (first) (rest))))

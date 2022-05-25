@@ -31,6 +31,9 @@
 (define _StringCompiler_pointer (_cpointer 'StringCompiler))
 (define _StringPrinter_pointer (_cpointer 'StringPrinter))
 
+(define _StateIterator_pointer (_cpointer 'StateIterator))
+(define _ArcIterator_pointer (_cpointer 'ArcIterator))
+
 (define _StateId _int)
 
 (define _ProjectType (_enum '(PROJECT_INPUT PROJECT_OUTPUT)))
@@ -55,8 +58,6 @@
 (define-fst Fst-InputSymbols  (_fun _Fst -> (_or-null _SymbolTable_pointer)))
 (define-fst Fst-OutputSymbols (_fun _Fst -> (_or-null _SymbolTable_pointer)))
 
-(define-fst new-Arc (_fun _int _int _float _StateId -> _Arc))
-
 (define-fst SymbolTable-NumSymbols (_fun _SymbolTable_pointer -> _size))
 (define-fst SymbolTable-GetNthKey  (_fun _SymbolTable_pointer _size -> _int64))
 (define-fst SymbolTable-Find       (_fun _SymbolTable_pointer _int64 -> _string))
@@ -76,3 +77,19 @@
 (define-fst Fst-Difference (_fun _Fst _Fst -> _Fst))
 
 (define-fst Fst-Project (_fun _Fst _ProjectType -> _Fst))
+
+(define-fst new-Arc (_fun _int _int _float _StateId -> _Arc))
+(define-fst Arc-ilabel (_fun _Arc -> _int))
+(define-fst Arc-olabel (_fun _Arc -> _int))
+(define-fst Arc-weight (_fun _Arc -> _float))
+(define-fst Arc-nextstate (_fun _Arc -> _StateId))
+
+(define-fst new-StateIterator (_fun _Fst -> _StateIterator_pointer))
+(define-fst StateIterator-Value (_fun _StateIterator_pointer -> _int))
+(define-fst StateIterator-Next (_fun _StateIterator_pointer -> _void))
+(define-fst StateIterator-Done (_fun _StateIterator_pointer -> _bool))
+
+(define-fst new-ArcIterator (_fun _Fst _StateId -> _ArcIterator_pointer))
+(define-fst ArcIterator-Value (_fun _ArcIterator_pointer -> _Arc))
+(define-fst ArcIterator-Next (_fun _ArcIterator_pointer -> _void))
+(define-fst ArcIterator-Done (_fun _ArcIterator_pointer -> _bool))
