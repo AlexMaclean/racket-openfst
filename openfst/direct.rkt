@@ -6,26 +6,32 @@
 (define label? (or/c natural? char?))
 
 (provide/contract
- [rename new-VectorFst make-fst (-> FST?)]
- [rename VectorFst-AddState fst-add-state! (FST? . -> . natural?)]
- [rename VectorFst-AddStates fst-add-states! (FST? natural? . -> . void?)]
- [rename VectorFst-NumStates fst-num-states (FST? . -> . natural?)]
- [rename VectorFst-NumArcs fst-num-arcs (FST? natural? . -> . natural?)]
- [rename VectorFst-AddArc fst-add-arc! (FST? natural? FST-Arc? . -> . void?)]
- [rename VectorFst-SetStart fst-set-start! (FST? natural? . -> . void?)]
- [rename VectorFst-SetFinal fst-set-final! (FST? natural? real? . -> . void?)]
+ [rename new-Fst make-fst (-> FST?)]
+ [rename Fst-AddState fst-add-state! (FST? . -> . natural?)]
+ [rename Fst-AddStates fst-add-states! (FST? natural? . -> . void?)]
+ [rename Fst-NumStates fst-num-states (FST? . -> . natural?)]
+ [rename Fst-NumArcs fst-num-arcs (FST? natural? . -> . natural?)]
+ [rename Fst-AddArc fst-add-arc! (FST? natural? Arc? . -> . void?)]
+ [rename Fst-SetStart fst-set-start! (FST? natural? . -> . void?)]
+ [rename Fst-SetFinal fst-set-final! (FST? natural? real? . -> . void?)]
  [rename Fst-Start fst-start (FST? . -> . natural?)]
  [rename Fst-Final fst-weight (FST? natural? . -> . real?)]
  [rename Fst-InputSymbols fst-input-symbols (FST? . -> . any/c)]
  [rename Fst-OutputSymbols fst-output-symbols (FST? . -> . any/c)]
- [make-arc (label? label? real? natural?  . -> . FST-Arc?)]
+
  [fst-states (FST? . -> . (stream/c natural?))]
- [fst-arcs (FST? natural? . -> . (stream/c FST-Arc?))])
+ [fst-arcs (FST? natural? . -> . (stream/c Arc?))]
+
+ [Arc (label? label? real? natural?  . -> . Arc?)]
+ [Arc-ilable (Arc? . -> . natural?)]
+ [Arc-olable (Arc? . -> . natural?)]
+ [Arc-weight (Arc? . -> . real?)]
+ [rename Arc-nextstate Arc-next-state (Arc? . -> . natural?)])
 
 ;; Functions
 ;; ----------------------------------------------------------------------------
 
-(define (make-arc ilabel olabel weight dest)
+(define (Arc ilabel olabel weight dest)
   (new-Arc (label ilabel) (label olabel) weight dest))
 
 (define (fst-states fst)

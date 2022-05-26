@@ -4,39 +4,39 @@ using namespace fst;
 
 extern "C" {
 
-    StdVectorFst *new_VectorFst() {
+    StdVectorFst *new_Fst() {
         return new StdVectorFst();
     }
 
-    StdVectorFst *new_VectorFst_copy(fst::StdFst *fst) {
+    StdVectorFst *new_Fst_copy(fst::StdFst *fst) {
         return new StdVectorFst(*fst);
     }
 
-    void VectorFst_AddArc(fst::StdMutableFst *fst, int state, StdArc *arc) {
+    void Fst_AddArc(fst::StdMutableFst *fst, int state, StdArc *arc) {
         fst->AddArc(state, *arc);
     }
 
-    int VectorFst_AddState(fst::StdMutableFst *fst) {
+    int Fst_AddState(fst::StdMutableFst *fst) {
         return fst->AddState();
     }
 
-    void VectorFst_AddStates(fst::StdMutableFst *fst, size_t n) {
+    void Fst_AddStates(fst::StdMutableFst *fst, size_t n) {
         fst->AddStates(n);
     }
 
-    int VectorFst_NumStates(fst::StdMutableFst *fst) {
+    int Fst_NumStates(fst::StdMutableFst *fst) {
         return fst->NumStates();
     }
 
-    size_t VectorFst_NumArcs(fst::StdFst *fst, int state) {
+    size_t Fst_NumArcs(fst::StdFst *fst, int state) {
         return fst->NumArcs(state);
     }
 
-    void VectorFst_SetStart(fst::StdMutableFst *fst, int state) {
+    void Fst_SetStart(fst::StdMutableFst *fst, int state) {
         fst->SetStart(state);
     }
 
-    void VectorFst_SetFinal(fst::StdMutableFst *fst, int state, float weight) {
+    void Fst_SetFinal(fst::StdMutableFst *fst, int state, float weight) {
         fst->SetFinal(state, weight);
     }
 
