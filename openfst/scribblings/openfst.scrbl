@@ -5,6 +5,15 @@
 @title{OpenFST}
 @author{alex}
 
-@defmodule[openfst]
+@author[(author+email "Alex MacLean" "alex@alex-maclean.com")]
+
+@(require (for-label racket))
+
+@defmodule[openfst] {
 
 Package Description Here
+
+}
+
+@section{Direct Transducer Access}
+
