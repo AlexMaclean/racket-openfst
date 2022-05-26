@@ -1,10 +1,10 @@
 #lang scribble/manual
-@require[@for-label[racket-openfst
+@require[@for-label[openfst
                     racket/base]]
 
-@title{racket-openfst}
+@title{OpenFST}
 @author{alex}
 
-@defmodule[racket-openfst]
+@defmodule[openfst]
 
 Package Description Here
