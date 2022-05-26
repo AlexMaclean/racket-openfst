@@ -68,6 +68,8 @@ extern "C" {
         return new StdVectorFst(StdProjectFst(*fst, projectType));
     }
 
+    // Symbol Table
+
     size_t SymbolTable_NumSymbols(const SymbolTable *table) {
         return table->NumSymbols();
     }
@@ -81,6 +83,8 @@ extern "C" {
         return s->c_str();
     }
 
+    // String Compiler
+
     StdStringCompiler *new_StringCompiler() {
         return new StdStringCompiler();
     }
@@ -91,6 +95,8 @@ extern "C" {
         return fst;
     }
 
+    // String Printer
+
     StdStringPrinter *new_StringPrinter() {
         return new StdStringPrinter();
     }
@@ -100,6 +106,8 @@ extern "C" {
         (*printer)(*fst, str);
         return str->c_str();
     }
+
+    // Scripts
 
     fst::StdMutableFst *Fst_ShortestPath(const fst::StdFst *fst, int32_t n_shortest) {
         StdVectorFst *out_fst = new StdVectorFst();
@@ -144,6 +152,8 @@ extern "C" {
         return ofst;
     }
 
+    // Arc
+
     fst::StdArc *new_Arc(int ilabel, int olabel, float weight, int dest) {
         return new fst::StdArc(ilabel, olabel, weight, dest);
     }
@@ -164,6 +174,8 @@ extern "C" {
         return arc->nextstate;
     }
 
+    // State Iterator
+
     fst::StateIterator<fst::StdFst> *new_StateIterator(fst::StdMutableFst *fst) {
         return new StateIterator<fst::StdFst>(*fst);
     }
@@ -179,6 +191,8 @@ extern "C" {
     bool StateIterator_Done(fst::StateIterator<fst::StdFst> *siter) {
         return siter->Done();
     }
+
+    // Arc Iterator
 
     fst::ArcIterator<fst::StdFst> *new_ArcIterator(fst::StdMutableFst *fst, int state) {
         return new ArcIterator<fst::StdFst>(*fst, state);

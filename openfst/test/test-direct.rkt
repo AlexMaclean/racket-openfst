@@ -14,14 +14,18 @@
 (fst-add-state! fst)   ;; 1st state will be state 0 (returned by AddState)
 (fst-set-start! fst 0)  ;; arg is state ID
 
+(define a1 (Arc #\a #\A 0.1 1))
+(Arc-ilabel a1)
+
+
 ;; Adds two arcs exiting state 0.
 ;; Arc constructor args: ilabel, olabel, weight, dest state ID.
-(fst-add-arc! fst 0 (make-arc 1 1 0.5 1))  ;; 1st arg is src state ID
-(fst-add-arc! fst 0 (make-arc 2 2 1.5 1))
+(fst-add-arc! fst 0 (Arc 1 1 0.5 1))  ;; 1st arg is src state ID
+(fst-add-arc! fst 0 (Arc 2 2 1.5 1))
 
 ;; Adds state 1 and its arc.
 (fst-add-state! fst)
-(fst-add-arc! fst 1 (make-arc 3 3 2.5 2))
+(fst-add-arc! fst 1 (Arc 3 3 2.5 2))
 
 ;; Adds state 2 and set its final weight.
 (fst-add-state! fst)

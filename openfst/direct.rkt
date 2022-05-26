@@ -23,8 +23,8 @@
  [fst-arcs (FST? natural? . -> . (stream/c Arc?))]
 
  [Arc (label? label? real? natural?  . -> . Arc?)]
- [Arc-ilable (Arc? . -> . natural?)]
- [Arc-olable (Arc? . -> . natural?)]
+ [Arc-ilabel (Arc? . -> . natural?)]
+ [Arc-olabel (Arc? . -> . natural?)]
  [Arc-weight (Arc? . -> . real?)]
  [rename Arc-nextstate Arc-next-state (Arc? . -> . natural?)])
 
