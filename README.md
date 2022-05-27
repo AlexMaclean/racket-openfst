@@ -1,3 +1,3 @@
-racket-openfst
+Racket OpenFst Bindings
 ==============
 README text here.
