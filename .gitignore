@@ -5,6 +5,8 @@
 compiled/
 doc/
 *.so
+*.so.*
+*.la
 *.fst
 *.far
 *.bak
