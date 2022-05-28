@@ -1,10 +1,21 @@
 #lang info
 
-(define name "OpenFST")
+(define pkg-name "OpenFST")
 (define collection "openfst")
-
-(define deps '("base"))
-(define build-deps '("scribble-lib" "racket-doc" "rackunit-lib"))
-(define scribblings '(("scribblings/openfst.scrbl" ())))
-(define pkg-desc "Description Here")
+(define pkg-desc "Racket bindings for OpenFST")
 (define version "0.0")
+
+(define scribblings
+  '(("scribblings/openfst.scrbl" ())))
+
+(define deps
+  '("base"
+    ["libgit2-x86_64-linux" #:platform #rx"^x86_64-linux(?:-natipkg)?$"]))
+
+(define build-deps
+  '("scribble-lib"
+    "racket-doc"
+    "rackunit-lib"))
+
+(define license
+  'Apache-2.0)
