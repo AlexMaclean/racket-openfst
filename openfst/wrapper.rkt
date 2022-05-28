@@ -1,22 +1,21 @@
 #lang racket/base
 
-(require ffi/unsafe ffi/unsafe/define ffi/unsafe/define/conventions setup/collection-search
+(require ffi/unsafe
+         ffi/unsafe/define
+         ffi/unsafe/define/conventions
+         setup/collection-search
+         racket/runtime-path
+         (for-syntax racket/base)
          (rename-in racket/contract (-> ->/c)))
 
 ;; Library
 ;; ----------------------------------------------------------------------------
 
+(define-runtime-path wrapper-path
+  '(so "openfst_wrapper" (#f)))
+
 (define wrapper-library
-  (or
-   (collection-search
-    '(lib "openfst/lib")
-    #:combine
-    (λ (_ path)
-      (ffi-lib (build-path path "openfst_wrapper")
-               #:fail (λ () #f)))
-    #:break?
-    (λ (x) x))
-   (ffi-lib "lib/openfst_wrapper")))
+  (ffi-lib wrapper-path))
 
 (define-ffi-definer define-fst wrapper-library
   #:provide provide-protected
