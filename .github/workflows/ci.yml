@@ -17,7 +17,7 @@ jobs:
           variant: ${{ matrix.racket-variant }}
           version: ${{ matrix.racket-version }}
       - name: Installing openfst and its dependencies
-        run: raco pkg install -t dir openfst/
+        run: raco pkg install -t dir openfst-x86_64-linux/ openfst/
       # - name: Compiling racket-openfst and building its docs
       #   run: raco setup --check-pkg-deps --unused-pkg-deps openfst
       # - name: Testing openfst
