@@ -10,3 +10,7 @@ openfst/lib/**.so
 *.fst
 *.far
 *.bak
+
+*.css
+*.html
+*.js
