@@ -15,8 +15,7 @@
  [fst-concat  ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]
  [fst-accept ((string?) (#:weight real?) . ->* . FST?)]
  [fst-difference (fst-like? fst-like? . -> . FST?)]
- [fst-project (fst-like? (or/c 'input 'output) . -> . FST?)]
- [fst-like (fst-like? . -> . FST?)])
+ [fst-project (fst-like? (or/c 'input 'output) . -> . FST?)])
 
 (provide fst-like? FST?)
 

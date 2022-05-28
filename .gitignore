@@ -5,8 +5,8 @@
 compiled/
 doc/
 openfst/lib/**.so
-*.so.*
-*.la
+openfst/lib/*.so.*
+openfst/lib/*.la
 *.fst
 *.far
 *.bak
