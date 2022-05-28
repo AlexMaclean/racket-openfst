@@ -4,7 +4,7 @@
 .DS_Store
 compiled/
 doc/
-*.so
+openfst/lib/**.so
 *.so.*
 *.la
 *.fst
