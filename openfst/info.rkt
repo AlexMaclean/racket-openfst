@@ -17,5 +17,7 @@
     "racket-doc"
     "rackunit-lib"))
 
+(define compile-omit-paths '("test"))
+
 (define license
   'Apache-2.0)
