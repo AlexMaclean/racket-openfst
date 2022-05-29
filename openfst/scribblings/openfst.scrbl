@@ -5,11 +5,9 @@
 
 @author[(author+email "Alex MacLean" "alex@alex-maclean.com")]
 
-
 @defmodule[openfst]
 
 This package is definitely a work in progress. Apologies for the current incompleteness!
-
 
 
 @section{Direct Automata Access}
@@ -18,7 +16,6 @@ This package is definitely a work in progress. Apologies for the current incompl
 @defproc[(FST? [v any/c]) boolean?]{
 
 }
-
 
 @defproc[(make-fst) FST?]{
 
@@ -44,7 +41,6 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 }
 
-
 @defproc[(fst-num-states [fst FST?]) exact-nonnegative-integer?]{
 
 }
@@ -60,14 +56,6 @@ This package is definitely a work in progress. Apologies for the current incompl
 @defproc[(fst-weight [fst FST?] [state exact-nonnegative-integer?]) real?]{
 
 }
-
-
-
-@; [rename Fst-InputSymbols fst-input-symbols (FST? . -> . any/c)]
-@; [rename Fst-OutputSymbols fst-output-symbols (FST? . -> . any/c)]
-
-@; [fst-states (FST? . -> . (stream/c exact-nonnegative-integer?))]
-@; [fst-arcs (FST? exact-nonnegative-integer? . -> . (stream/c Arc?))]
 
 @defproc[(fst-states [fst FST?]) (stream/c exact-nonnegative-integer?)]{
 
