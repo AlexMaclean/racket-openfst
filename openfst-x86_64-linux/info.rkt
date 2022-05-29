@@ -6,7 +6,7 @@
 (define pkg-desc
   "native libraries for \"openfst\" on \"x86_64-linux\"")
 
-(define build-deps
+(define deps
   '("base"))
 
 (define install-platform #rx"^x86_64-linux(?:-natipkg)?$")
