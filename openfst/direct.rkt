@@ -2,31 +2,30 @@
 
 (require racket/contract racket/match racket/stream "wrapper.rkt")
 
-(define natural? (and/c exact-integer? (not/c negative?)))
-(define label? (or/c natural? char?))
+(define label? (or/c exact-nonnegative-integer? char?))
 
 (provide/contract
  [rename new-Fst make-fst (-> FST?)]
- [rename Fst-AddState fst-add-state! (FST? . -> . natural?)]
- [rename Fst-AddStates fst-add-states! (FST? natural? . -> . void?)]
- [rename Fst-AddArc fst-add-arc! (FST? natural? Arc? . -> . void?)]
- [rename Fst-SetStart fst-set-start! (FST? natural? . -> . void?)]
- [rename Fst-SetFinal fst-set-final! (FST? natural? real? . -> . void?)]
- [rename Fst-NumStates fst-num-states (FST? . -> . natural?)]
- [rename Fst-NumArcs fst-num-arcs (FST? natural? . -> . natural?)]
- [rename Fst-Start fst-start (FST? . -> . natural?)]
- [rename Fst-Final fst-weight (FST? natural? . -> . real?)]
+ [rename Fst-AddState fst-add-state! (FST? . -> . exact-nonnegative-integer?)]
+ [rename Fst-AddStates fst-add-states! (FST? exact-nonnegative-integer? . -> . void?)]
+ [rename Fst-AddArc fst-add-arc! (FST? exact-nonnegative-integer? Arc? . -> . void?)]
+ [rename Fst-SetStart fst-set-start! (FST? exact-nonnegative-integer? . -> . void?)]
+ [rename Fst-SetFinal fst-set-final! (FST? exact-nonnegative-integer? real? . -> . void?)]
+ [rename Fst-NumStates fst-num-states (FST? . -> . exact-nonnegative-integer?)]
+ [rename Fst-NumArcs fst-num-arcs (FST? exact-nonnegative-integer? . -> . exact-nonnegative-integer?)]
+ [rename Fst-Start fst-start (FST? . -> . exact-nonnegative-integer?)]
+ [rename Fst-Final fst-weight (FST? exact-nonnegative-integer? . -> . real?)]
  [rename Fst-InputSymbols fst-input-symbols (FST? . -> . any/c)]
  [rename Fst-OutputSymbols fst-output-symbols (FST? . -> . any/c)]
 
- [fst-states (FST? . -> . (stream/c natural?))]
- [fst-arcs (FST? natural? . -> . (stream/c Arc?))]
+ [fst-states (FST? . -> . (stream/c exact-nonnegative-integer?))]
+ [fst-arcs (FST? exact-nonnegative-integer? . -> . (stream/c Arc?))]
 
- [Arc (label? label? real? natural?  . -> . Arc?)]
- [Arc-ilabel (Arc? . -> . natural?)]
- [Arc-olabel (Arc? . -> . natural?)]
+ [Arc (label? label? real? exact-nonnegative-integer?  . -> . Arc?)]
+ [Arc-ilabel (Arc? . -> . exact-nonnegative-integer?)]
+ [Arc-olabel (Arc? . -> . exact-nonnegative-integer?)]
  [Arc-weight (Arc? . -> . real?)]
- [rename Arc-nextstate Arc-next-state (Arc? . -> . natural?)])
+ [rename Arc-nextstate Arc-next-state (Arc? . -> . exact-nonnegative-integer?)])
 
 ;; Functions
 ;; ----------------------------------------------------------------------------

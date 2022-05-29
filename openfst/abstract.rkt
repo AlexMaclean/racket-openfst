@@ -9,7 +9,7 @@
  [rename Fst-Read fst-read (path-string? . -> . FST?)]
  [fst-cross (fst-like? fst-like? . -> . FST?)]
  [fst->string (fst-like? . -> . string?)]
- [fst-shortest-path ((fst-like?) ((and/c integer? positive?)) . ->* . FST?)]
+ [fst-shortest-path ((fst-like?) (exact-positive-integer?) . ->* . FST?)]
  [fst-union   ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]
  [fst-compose ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]
  [fst-concat  ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]

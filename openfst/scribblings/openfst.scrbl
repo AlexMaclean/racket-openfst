@@ -24,40 +24,40 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 }
 
-@defproc[(fst-add-state! [fst FST?]) natural?]{
+@defproc[(fst-add-state! [fst FST?]) exact-nonnegative-integer?]{
 
 }
 
-@defproc[(fst-add-states! [fst FST?] [n natural?]) void?]{
+@defproc[(fst-add-states! [fst FST?] [n exact-nonnegative-integer?]) void?]{
 
 }
 
-@defproc[(fst-add-arc! [fst FST?] [state natural?] [arc Arc?]) void?]{
+@defproc[(fst-add-arc! [fst FST?] [state exact-nonnegative-integer?] [arc Arc?]) void?]{
 
 }
 
-@defproc[(fst-set-start! [fst FST?] [state natural?]) void?]{
+@defproc[(fst-set-start! [fst FST?] [state exact-nonnegative-integer?]) void?]{
 
 }
 
-@defproc[(fst-set-final! [fst FST?] [state natural?] [weight real?]) void?]{
+@defproc[(fst-set-final! [fst FST?] [state exact-nonnegative-integer?] [weight real?]) void?]{
 
 }
 
 
-@defproc[(fst-num-states [fst FST?]) natural?]{
+@defproc[(fst-num-states [fst FST?]) exact-nonnegative-integer?]{
 
 }
 
-@defproc[(fst-num-arcs [fst FST?] [state natural?]) natural?]{
+@defproc[(fst-num-arcs [fst FST?] [state exact-nonnegative-integer?]) exact-nonnegative-integer?]{
 
 }
 
-@defproc[(fst-start [fst FST?]) natural?]{
+@defproc[(fst-start [fst FST?]) exact-nonnegative-integer?]{
 
 }
 
-@defproc[(fst-weight [fst FST?] [state natural?]) real?]{
+@defproc[(fst-weight [fst FST?] [state exact-nonnegative-integer?]) real?]{
 
 }
 
@@ -66,25 +66,25 @@ This package is definitely a work in progress. Apologies for the current incompl
 @; [rename Fst-InputSymbols fst-input-symbols (FST? . -> . any/c)]
 @; [rename Fst-OutputSymbols fst-output-symbols (FST? . -> . any/c)]
 
-@; [fst-states (FST? . -> . (stream/c natural?))]
-@; [fst-arcs (FST? natural? . -> . (stream/c Arc?))]
+@; [fst-states (FST? . -> . (stream/c exact-nonnegative-integer?))]
+@; [fst-arcs (FST? exact-nonnegative-integer? . -> . (stream/c Arc?))]
 
-@defproc[(fst-states [fst FST?]) (stream/c natural?)]{
-
-}
-
-@defproc[(fst-arcs [fst FST?] [state natural?]) (stream/c Arc?)]{
+@defproc[(fst-states [fst FST?]) (stream/c exact-nonnegative-integer?)]{
 
 }
 
+@defproc[(fst-arcs [fst FST?] [state exact-nonnegative-integer?]) (stream/c Arc?)]{
 
-@defstruct*[Arc ([ilabel label?] [olable label?] [weight real?] [next-state natural?])]
+}
 
-@; [Arc (label? label? real? natural?  . -> . Arc?)]
-@; [Arc-ilabel (Arc? . -> . natural?)]
-@; [Arc-olabel (Arc? . -> . natural?)]
+
+@defstruct*[Arc ([ilabel label?] [olable label?] [weight real?] [next-state exact-nonnegative-integer?])]
+
+@; [Arc (label? label? real? exact-nonnegative-integer?  . -> . Arc?)]
+@; [Arc-ilabel (Arc? . -> . exact-nonnegative-integer?)]
+@; [Arc-olabel (Arc? . -> . exact-nonnegative-integer?)]
 @; [Arc-weight (Arc? . -> . real?)]
-@; [rename Arc-nextstate Arc-next-state (Arc? . -> . natural?)])
+@; [rename Arc-nextstate Arc-next-state (Arc? . -> . exact-nonnegative-integer?)])
 
 
 @section{Abstract Automata Manipulation}
@@ -93,7 +93,7 @@ This package is definitely a work in progress. Apologies for the current incompl
 @; [rename Fst-Read fst-read (path-string? . -> . FST?)]
 @; [fst-cross (fst-like? fst-like? . -> . FST?)]
 @; [fst->string (fst-like? . -> . string?)]
-@; [fst-shortest-path ((fst-like?) ((and/c integer? positive?)) . ->* . FST?)]
+@; [fst-shortest-path ((fst-like?) (exact-positive-integer?) . ->* . FST?)]
 @; [fst-union   ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]
 @; [fst-compose ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]
 @; [fst-concat  ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]
@@ -134,7 +134,7 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 }
 
-@defproc[(fst-shortest-path [fst fst-like?] [n (and/c integer? positive?) 1]) FST?]{
+@defproc[(fst-shortest-path [fst fst-like?] [n exact-positive-integer? 1]) FST?]{
 
 }
 
