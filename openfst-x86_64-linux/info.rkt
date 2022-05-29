@@ -6,6 +6,9 @@
 (define pkg-desc
   "native libraries for \"openfst\" on \"x86_64-linux\"")
 
+(define deps
+  '("base"))
+
 (define install-platform #rx"^x86_64-linux(?:-natipkg)?$")
 (define copy-foreign-libs
   '("libfst.so.25"
