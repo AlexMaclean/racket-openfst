@@ -21,4 +21,4 @@ jobs:
       # - name: Compiling racket-openfst and building its docs
       #   run: raco setup --check-pkg-deps --unused-pkg-deps openfst
       - name: Testing openfst
-        run: raco test -x -p openfst
+        run: raco test -p openfst
