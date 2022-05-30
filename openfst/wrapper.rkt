@@ -52,7 +52,6 @@
 (define-fst new-Fst-copy  (_fun _Fst -> _Fst))
 (define-fst Fst-AddArc    (_fun _Fst _StateId _Arc -> _void))
 (define-fst Fst-AddState  (_fun _Fst -> _StateId))
-(define-fst Fst-AddStates (_fun _Fst _size -> _void))
 (define-fst Fst-NumStates (_fun _Fst -> _StateId))
 (define-fst Fst-NumArcs   (_fun _Fst _StateId -> _size))
 (define-fst Fst-SetStart  (_fun _Fst _StateId -> _void))

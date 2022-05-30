@@ -7,7 +7,6 @@
 (provide/contract
  [rename new-Fst make-fst (-> FST?)]
  [rename Fst-AddState fst-add-state! (FST? . -> . exact-nonnegative-integer?)]
- [rename Fst-AddStates fst-add-states! (FST? exact-nonnegative-integer? . -> . void?)]
  [rename Fst-AddArc fst-add-arc! (FST? exact-nonnegative-integer? Arc? . -> . void?)]
  [rename Fst-SetStart fst-set-start! (FST? exact-nonnegative-integer? . -> . void?)]
  [rename Fst-SetFinal fst-set-final! (FST? exact-nonnegative-integer? real? . -> . void?)]

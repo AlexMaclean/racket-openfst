@@ -25,10 +25,6 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 }
 
-@defproc[(fst-add-states! [fst FST?] [n exact-nonnegative-integer?]) void?]{
-
-}
-
 @defproc[(fst-add-arc! [fst FST?] [state exact-nonnegative-integer?] [arc Arc?]) void?]{
 
 }
