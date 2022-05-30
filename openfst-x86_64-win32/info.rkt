@@ -1,10 +1,10 @@
 #lang info
 
-(define pkg-name "openfst-x86_64-windows")
+(define pkg-name "openfst-x86_64-win32")
 (define collection "openfst")
 (define version "0.0")
 (define pkg-desc
-  "native libraries for \"openfst\" on \"x86_64-windows\"")
+  "native libraries for \"openfst\" on \"x86_64-win32\"")
 
 (define deps
   '("base"))
