@@ -9,7 +9,7 @@
 (define deps
   '("base"))
 
-(define install-platform #rx"^x86_64-windows(?:-natipkg)?$")
+(define install-platform #rx"^win32.x86_64")
 (define copy-foreign-libs
   '("openfst_wrapper.dll"))
 
