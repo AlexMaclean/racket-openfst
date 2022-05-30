@@ -2,12 +2,13 @@ on: [push, pull_request]
 name: CI
 jobs:
   build:
-    name: "Build on Racket '${{ matrix.racket-version }}' (${{ matrix.racket-variant }})"
+    name: "Build on Racket '${{ matrix.racket-version }}' (${{ matrix.racket-variant }}) on ${{ matrix.platform }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         racket-version: ["stable", "current"]
         racket-variant: ["BC", "CS"]
+        platform: ["ubuntu-latest", "windows-latest"]
     steps:
       - uses: actions/checkout@v2
       - uses: Bogdanp/setup-racket@v0.12
@@ -16,6 +17,7 @@ jobs:
           distribution: full
           variant: ${{ matrix.racket-variant }}
           version: ${{ matrix.racket-version }}
+
       - name: Installing openfst and its dependencies
         run: raco pkg install -t dir openfst-x86_64-linux/ openfst/
       - name: Compiling openfst and building its docs
