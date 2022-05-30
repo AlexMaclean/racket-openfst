@@ -20,10 +20,10 @@ jobs:
           version: ${{ matrix.racket-version }}
 
       - name: Installing openfst native libararies (Linux)
-        if: ${{ matrix.platform == ubuntu-latest }}
+        if: ${{ matrix.platform == 'ubuntu-latest' }}
         run: raco pkg install -t dir openfst-x86_64-linux/
       - name: Installing openfst native libararies (Windows)
-        if: ${{ matrix.platform == windows-latest }}
+        if: ${{ matrix.platform == 'windows-latest' }}
         run: raco pkg install -t dir openfst-x86_64-windows/
         
       - name: Installing openfst
