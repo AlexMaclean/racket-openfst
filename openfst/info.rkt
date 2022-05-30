@@ -10,7 +10,8 @@
 
 (define deps
   '("base"
-    ["openfst-x86_64-linux" #:platform #rx"^x86_64-linux(?:-natipkg)?$"]))
+    ["openfst-x86_64-linux" #:platform #rx"^x86_64-linux(?:-natipkg)?$"]
+    ["openfst-x86_64-windows" #:platform #rx"^x86_64-windows(?:-natipkg)?$"]))
 
 (define build-deps
   '("scribble-lib"
