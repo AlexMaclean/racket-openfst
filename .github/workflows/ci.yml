@@ -24,7 +24,7 @@ jobs:
         run: raco pkg install -t dir openfst-x86_64-linux/
       - name: Installing openfst native libararies (Windows)
         if: ${{ matrix.platform == 'windows-latest' }}
-        run: raco pkg install -t dir openfst-x86_64-windows/
+        run: raco pkg install -t dir openfst-x86_64-win32/
         
       - name: Installing openfst
         run: raco pkg install -t dir openfst/
