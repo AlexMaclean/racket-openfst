@@ -45,7 +45,7 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 }
 
-@defproc[(fst-start [fst FST?]) exact-nonnegative-integer?]{
+@defproc[(fst-start [fst FST?]) (or/c #f exact-nonnegative-integer?)]{
 
 }
 
