@@ -12,9 +12,7 @@
  [rename Fst-SetFinal fst-set-final! (FST? exact-nonnegative-integer? real? . -> . void?)]
  [rename Fst-NumStates fst-num-states (FST? . -> . exact-nonnegative-integer?)]
  [rename Fst-NumArcs fst-num-arcs (FST? exact-nonnegative-integer? . -> . exact-nonnegative-integer?)]
- [rename Fst-Final fst-weight (FST? exact-nonnegative-integer? . -> . real?)]
- [rename Fst-InputSymbols fst-input-symbols (FST? . -> . any/c)]
- [rename Fst-OutputSymbols fst-output-symbols (FST? . -> . any/c)]
+ [rename Fst-Final fst-final (FST? exact-nonnegative-integer? . -> . real?)]
 
  [fst-states (FST? . -> . (stream/c exact-nonnegative-integer?))]
  [fst-arcs (FST? exact-nonnegative-integer? . -> . (stream/c Arc?))]
