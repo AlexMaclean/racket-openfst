@@ -12,13 +12,13 @@
  [rename Fst-SetFinal fst-set-final! (FST? exact-nonnegative-integer? real? . -> . void?)]
  [rename Fst-NumStates fst-num-states (FST? . -> . exact-nonnegative-integer?)]
  [rename Fst-NumArcs fst-num-arcs (FST? exact-nonnegative-integer? . -> . exact-nonnegative-integer?)]
- [rename Fst-Start fst-start (FST? . -> . exact-nonnegative-integer?)]
  [rename Fst-Final fst-weight (FST? exact-nonnegative-integer? . -> . real?)]
  [rename Fst-InputSymbols fst-input-symbols (FST? . -> . any/c)]
  [rename Fst-OutputSymbols fst-output-symbols (FST? . -> . any/c)]
 
  [fst-states (FST? . -> . (stream/c exact-nonnegative-integer?))]
  [fst-arcs (FST? exact-nonnegative-integer? . -> . (stream/c Arc?))]
+ [fst-start (FST? . -> . (or/c #f exact-nonnegative-integer?))]
 
  [Arc (label? label? real? exact-nonnegative-integer?  . -> . Arc?)]
  [Arc-ilabel (Arc? . -> . exact-nonnegative-integer?)]
@@ -30,7 +30,7 @@
 ;; ----------------------------------------------------------------------------
 
 (define (Arc ilabel olabel weight dest)
-  (new-Arc (label ilabel) (label olabel) weight dest))
+  (new-Arc (label ilabel) (label olabel) (exact->inexact weight) dest))
 
 (define (fst-states fst)
   (iterator->stream (new-StateIterator fst) StateIterator-Value
@@ -39,6 +39,10 @@
 (define (fst-arcs fst state)
   (iterator->stream (new-ArcIterator fst state) ArcIterator-Value
                     ArcIterator-Done ArcIterator-Next))
+
+(define (fst-start fst)
+  (let ([start (Fst-Start fst)])
+   (if (equal? start -1) #f start)))
 
 ;; Helper Functions
 ;; ----------------------------------------------------------------------------
@@ -54,9 +58,14 @@
       (values key (SymbolTable-Find SymbolTable key)))))
 
 (define (iterator->stream iter value done? next!)
-  (define (first) (value iter))
+  (define (first)
+    (value iter))
+  (define (get-stream)
+    (if (done? iter)
+      empty-stream
+      (stream-cons #:eager (first) (rest))))
   (define (rest)
-    (if (done? iter) empty-stream
-        (begin (next! iter) (stream-cons (first) (rest)))))
-  (if (done? iter) empty-stream
-      (stream-cons (first) (rest))))
+    (next! iter)
+    (get-stream))
+
+  (get-stream))
