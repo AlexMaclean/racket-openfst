@@ -14,7 +14,7 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 
 @defproc[(FST? [v any/c]) boolean?]{
-    Returns @racket(#true) if the given val is a finite state transducer, constructed with @racket(make-fst).
+    Returns @racket[#true] if the given v is a finite state transducer, constructed with @racket[make-fst].
 }
 
 @defproc[(make-fst) FST?]{
