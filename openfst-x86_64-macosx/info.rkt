@@ -9,7 +9,7 @@
 (define deps
   '("base"))
 
-(define install-platform #rx"mac")
+(define install-platform #rx"^x86_64-macosx")
 (define copy-foreign-libs
   '())
 
