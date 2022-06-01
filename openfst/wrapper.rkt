@@ -5,6 +5,7 @@
          ffi/unsafe/define/conventions
          setup/collection-search
          racket/runtime-path
+         racket/struct
          (for-syntax racket/base)
          (rename-in racket/contract (-> ->/c)))
 
@@ -29,7 +30,31 @@
  [arc? (->/c any/c boolean?)])
 
 (struct fst (pointer))
-(struct arc (pointer))
+
+(struct arc (pointer)
+  #:methods gen:equal+hash
+  [(define (equal-proc arc1 arc2 recursive-equal?)
+     (and (= (Arc-ilabel arc1) (Arc-ilabel arc2))
+          (= (Arc-olabel arc1) (Arc-olabel arc2))
+          (= (Arc-weight arc1) (Arc-weight arc2))
+          (= (Arc-nextstate arc1) (Arc-nextstate arc2))))
+
+   (define (hash-proc arc recursive-equal-hash)
+     (bitwise-xor (Arc-ilabel arc)
+                  (arithmetic-shift (Arc-olabel arc) 2)
+                  (arithmetic-shift (Arc-weight arc) 4)
+                  (arithmetic-shift (Arc-nextstate arc) 6)))
+
+   (define (hash2-proc arc recursive-equal-hash)
+     (bitwise-xor (arithmetic-shift (Arc-ilabel arc) 6)
+                  (arithmetic-shift (Arc-olabel arc) 4)
+                  (arithmetic-shift (Arc-weight arc) 2)
+                  (Arc-nextstate arc)))]
+  #:methods gen:custom-write
+  [(define write-proc
+     (make-constructor-style-printer
+      (λ (obj) 'arc)
+      (λ (obj) (list (Arc-ilabel obj) (Arc-olabel obj) (Arc-weight obj) (Arc-nextstate obj)))))])
 
 (define _Fst (make-ctype (_cpointer 'StdMutableFst) fst-pointer fst))
 (define _Arc (make-ctype (_cpointer 'StdArc) arc-pointer arc))

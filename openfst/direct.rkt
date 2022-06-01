@@ -9,7 +9,7 @@
  [rename Fst-AddState fst-add-state! (fst? . -> . exact-nonnegative-integer?)]
  [rename Fst-AddArc fst-add-arc! (fst? exact-nonnegative-integer? arc? . -> . void?)]
  [rename Fst-SetStart fst-set-start! (fst? exact-nonnegative-integer? . -> . void?)]
- [rename Fst-SetFinal fst-set-final! (fst? exact-nonnegative-integer? real? . -> . void?)]
+ [fst-set-final! (fst? exact-nonnegative-integer? real? . -> . void?)]
  [rename Fst-NumStates fst-num-states (fst? . -> . exact-nonnegative-integer?)]
  [rename Fst-NumArcs fst-num-arcs (fst? exact-nonnegative-integer? . -> . exact-nonnegative-integer?)]
  [rename Fst-Final fst-final (fst? exact-nonnegative-integer? . -> . real?)]
@@ -34,15 +34,18 @@
 
 (define (fst-states fst)
   (iterator->list (new-StateIterator fst) StateIterator-Value
-                    StateIterator-Done StateIterator-Next))
+                  StateIterator-Done StateIterator-Next))
 
 (define (fst-arcs fst state)
   (iterator->list (new-ArcIterator fst state) ArcIterator-Value
-                    ArcIterator-Done ArcIterator-Next))
+                  ArcIterator-Done ArcIterator-Next))
 
 (define (fst-start fst)
   (let ([start (Fst-Start fst)])
-   (if (equal? start -1) #f start)))
+    (if (equal? start -1) #f start)))
+
+(define (fst-set-final! fst state weight)
+  (Fst-SetFinal fst state (exact->inexact weight)))
 
 ;; Helper Functions
 ;; ----------------------------------------------------------------------------
