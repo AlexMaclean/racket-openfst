@@ -12,6 +12,8 @@ lib/tmp
 *.far
 *.bak
 *.dylib
+*.dll
+*.o
 
 *.css
 *.html
