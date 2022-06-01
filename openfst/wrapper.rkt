@@ -32,7 +32,7 @@
 (struct arc (pointer))
 
 (define _Fst (make-ctype (_cpointer 'StdMutableFst) fst-pointer fst))
-(define _Arc (make-ctype (_cpointer 'StdArc) fst-pointer fst))
+(define _Arc (make-ctype (_cpointer 'StdArc) arc-pointer arc))
 
 (define _SymbolTable-pointer (_cpointer 'SymbolTable))
 (define _StringCompiler-pointer (_cpointer 'StringCompiler))

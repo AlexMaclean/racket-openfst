@@ -2,6 +2,8 @@
 
 (require "wrapper.rkt" racket/contract racket/match)
 
+(define (fst-like? v)
+  (or (string? v) (fst? v)))
 
 (provide/contract
  [fst-write (fst-like? path-string? . -> . void?)]
@@ -25,9 +27,6 @@
 (define compiler (new-StringCompiler))
 (define printer (new-StringPrinter))
 
-
-(define (fst-like? v)
-  (or (string? v) (fst? v)))
 
 (define (fst->string fst)
   (StringPrinter-call printer (fst-like fst)))

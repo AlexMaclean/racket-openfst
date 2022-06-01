@@ -15,20 +15,20 @@
 
      (check-equal? (fst-num-states fst) 0)
      (check-equal? (fst-states fst) '())
-     (check-equal? (fst-start fst) #f))
-     (check-equal? (fst? fst) #t)
+     (check-equal? (fst-start fst) #f)
+     (check-equal? (fst? fst) #t))
 
     (test-case
      "Single State Acceptor"
      (define fst (make-fst))
      (define s0 (fst-add-state! fst))
-     (define arc (arc #\A #\A 0 s0))
+     (define a (arc #\A #\A 0 s0))
 
-     (fst-add-arc! fst s0 arc)
+     (fst-add-arc! fst s0 a)
      (fst-set-start! fst s0)
      (fst-set-final! fst s0 0.12)
 
-     (check-equal? (arc? arc) #t)
+     (check-equal? (arc? a) #t)
      (check-equal? (fst-num-states fst) 1)
      (check-equal? (fst-num-arcs fst s0) 1)
      (check-equal? (fst-start fst) s0)
