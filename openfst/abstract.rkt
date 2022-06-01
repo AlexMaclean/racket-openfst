@@ -1,6 +1,6 @@
 #lang racket/base
 
-(require "wrapper.rkt" racket/contract racket/match)
+(require "wrapper.rkt" racket/contract racket/match racket/math)
 
 (define (fst-like? v)
   (or (string? v) (fst? v)))
@@ -15,6 +15,7 @@
  [fst-compose ((fst-like?) #:rest (listof fst-like?) . ->* . fst?)]
  [fst-concat  ((fst-like?) #:rest (listof fst-like?) . ->* . fst?)]
  [fst-accept ((string?) (#:weight real?) . ->* . fst?)]
+ [fst-closure ((fst?) (#:lower exact-nonnegative-integer? #:upper (and/c positive? (or/c exact-integer? infinite?))) . ->* . fst?)]
  [fst-difference (fst-like? fst-like? . -> . fst?)]
  [fst-project (fst-like? (or/c 'input 'output) . -> . fst?)]
 
@@ -60,6 +61,11 @@
                (match project-type
                  ['input 'PROJECT_INPUT]
                  ['output 'PROJECT_OUTPUT])))
+
+(define (fst-closure fst #:lower [lower 0] #:upper [upper +inf.0])
+  (when (lower . > . upper)
+    (error 'fst-closure "lower bound ~e is greater than upper bound ~e" lower upper))
+  (Fst-Closure (fst-like fst) lower (if (equal? upper +inf.0) 0 upper)))
 
 (define (fst-like arg)
   (if (string? arg) (fst-accept arg) arg))

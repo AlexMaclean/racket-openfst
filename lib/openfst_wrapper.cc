@@ -10,6 +10,75 @@
 
 using namespace fst;
 
+// Additional Script Functions -----------------------------------------
+
+void SetStartFinal(MutableFst<StdArc> *fst)
+{
+    static const auto *const kStartFinal = []
+    {
+        auto *sf = new VectorFst<StdArc>;
+        const auto state = sf->AddState();
+        sf->SetStart(state);
+        sf->SetFinal(state, 0);
+        return sf;
+    }();
+    Union(fst, *kStartFinal);
+}
+
+void ConcatRange(MutableFst<StdArc> *fst, int32_t lower, int32_t upper)
+{
+    if (fst->Start() == kNoStateId)
+        return;
+
+    const std::unique_ptr<const MutableFst<StdArc>> copy(fst->Copy());
+    if (upper == 0)
+    {
+        // Infinite upper bound.
+        {
+            const auto size = fst->NumStates();
+            const auto reserved = size * lower + size + 1;
+            fst->ReserveStates(reserved);
+        }
+        // The last element in the concatenation is star-closed; remaining
+        // concatenations are copies of the input.
+        Closure(fst, CLOSURE_STAR);
+        for (; lower > 0; --lower)
+            Concat(*copy, fst);
+    }
+    else if (lower == 0)
+    {
+        // Finite upper bound, lower bound includes zero.
+        {
+            const auto reserved = fst->NumStates() * upper + upper;
+            fst->ReserveStates(reserved);
+        }
+        for (; upper > 1; --upper)
+        {
+            SetStartFinal(fst);
+            Concat(*copy, fst);
+        }
+        SetStartFinal(fst);
+    }
+    else
+    {
+        // Finite upper bound, lower bound does not include zero.
+        {
+            const auto size = fst->NumStates();
+            const auto reserved = size * upper + upper - lower;
+            fst->ReserveStates(reserved);
+        }
+        for (; upper > lower; --upper)
+        {
+            SetStartFinal(fst);
+            Concat(*copy, fst);
+        }
+        for (; lower > 1; --lower)
+            Concat(*copy, fst);
+    }
+}
+
+// API -----------------------------------------------------------------
+
 extern "C"
 {
 
@@ -197,6 +266,13 @@ extern "C"
     {
         StdVectorFst *ofst = new StdVectorFst();
         Difference(*ifst1, *ifst2, ofst);
+        return ofst;
+    }
+
+    DllExport fst::StdMutableFst *Fst_Closure(fst::StdMutableFst *fst, int32_t lower, int32_t upper)
+    {
+        StdVectorFst *ofst = new StdVectorFst(*fst);
+        ConcatRange(ofst, lower, upper);
         return ofst;
     }
 

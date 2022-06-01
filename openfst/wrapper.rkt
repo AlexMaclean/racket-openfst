@@ -108,6 +108,7 @@
 (define-fst Fst-Difference (_fun _Fst _Fst -> _Fst))
 
 (define-fst Fst-Project (_fun _Fst _ProjectType -> _Fst))
+(define-fst Fst-Closure (_fun _Fst _int32 _int32 -> _Fst))
 
 (define-fst delete-Arc (_fun _Arc -> _void)
   #:wrap (deallocator))
