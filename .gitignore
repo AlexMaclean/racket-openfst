@@ -4,14 +4,17 @@
 .DS_Store
 compiled/
 doc/
-lib/**.so
-lib/*.so.*
-lib/*.la
+*.so
+*.so.*
+*.la
 lib/tmp
 *.fst
 *.far
 *.bak
+*.dylib
 
 *.css
 *.html
 *.js
+
+!openfst-x86_64*/*

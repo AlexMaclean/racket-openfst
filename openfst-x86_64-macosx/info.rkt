@@ -11,7 +11,8 @@
 
 (define install-platform #rx"^x86_64-macosx")
 (define copy-foreign-libs
-  '())
+  '("libfst.25.dylib"
+    "openfst_wrapper.dylib"))
 
 (define license
   'Apache-2.0)
