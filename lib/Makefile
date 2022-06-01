@@ -1,5 +1,5 @@
 
-all: 
+all:
 	echo "Must make with either macosx or linux"
 
 ## macosx ==========================
@@ -22,6 +22,7 @@ linux: x86_64-linux
 
 x86_64-linux: openfst_wrapper.so libfst.so.25
 	cp -fv ./*.so* ../openfst-x86_64-linux
+	cp -fv ./*.so* ../openfst
 
 openfst_wrapper.so: openfst_wrapper.cc libfst.so.25
 	LD_RUN_PATH='$$ORIGIN' g++-7 -fpic -shared -I/usr/local/include -L. -std=c++17 openfst_wrapper.cc -ldl -lfst -o openfst_wrapper.so

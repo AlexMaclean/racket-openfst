@@ -3,7 +3,7 @@
 (require ffi/unsafe
          ffi/unsafe/define
          ffi/unsafe/define/conventions
-         setup/collection-search
+         ffi/unsafe/alloc
          racket/runtime-path
          racket/struct
          (for-syntax racket/base)
@@ -87,17 +87,16 @@
 (define-fst Fst-Start     (_fun _Fst -> _StateId))
 (define-fst Fst-Read      (_fun _path -> _Fst))
 
-(define-fst Fst-InputSymbols  (_fun _Fst -> (_or-null _SymbolTable-pointer)))
-(define-fst Fst-OutputSymbols (_fun _Fst -> (_or-null _SymbolTable-pointer)))
-
-(define-fst SymbolTable-NumSymbols (_fun _SymbolTable-pointer -> _size))
-(define-fst SymbolTable-GetNthKey  (_fun _SymbolTable-pointer _size -> _int64))
-(define-fst SymbolTable-Find       (_fun _SymbolTable-pointer _int64 -> _string))
-
-(define-fst new-StringCompiler (_fun -> _StringCompiler-pointer))
+(define-fst delete-StringCompiler (_fun _StringCompiler-pointer -> _void)
+  #:wrap (deallocator))
+(define-fst new-StringCompiler (_fun -> _StringCompiler-pointer)
+  #:wrap (allocator delete-StringCompiler))
 (define-fst StringCompiler-call (_fun _StringCompiler-pointer _string _float -> _Fst))
 
-(define-fst new-StringPrinter (_fun -> _StringPrinter-pointer))
+(define-fst delete-StringPrinter (_fun _StringPrinter-pointer -> _void)
+  #:wrap (deallocator))
+(define-fst new-StringPrinter (_fun -> _StringPrinter-pointer)
+  #:wrap (allocator delete-StringPrinter))
 (define-fst StringPrinter-call (_fun _StringPrinter-pointer _Fst -> _string))
 
 (define-fst Fst-ShortestPath (_fun _Fst _int32 -> _Fst))
@@ -110,18 +109,40 @@
 
 (define-fst Fst-Project (_fun _Fst _ProjectType -> _Fst))
 
-(define-fst new-Arc (_fun _int _int _float _StateId -> _Arc))
+(define-fst delete-Arc (_fun _Arc -> _void)
+  #:wrap (deallocator))
+(define-fst new-Arc (_fun _int _int _float _StateId -> _Arc)
+  #:wrap (allocator delete-Arc))
 (define-fst Arc-ilabel (_fun _Arc -> _int))
 (define-fst Arc-olabel (_fun _Arc -> _int))
 (define-fst Arc-weight (_fun _Arc -> _float))
 (define-fst Arc-nextstate (_fun _Arc -> _StateId))
 
-(define-fst new-StateIterator (_fun _Fst -> _StateIterator-pointer))
+(define-fst delete-StateIterator (_fun _StateIterator-pointer -> _void)
+  #:wrap (deallocator))
+(define-fst new-StateIterator (_fun _Fst -> _StateIterator-pointer)
+  #:wrap (allocator delete-StateIterator))
 (define-fst StateIterator-Value (_fun _StateIterator-pointer -> _int))
 (define-fst StateIterator-Next (_fun _StateIterator-pointer -> _void))
 (define-fst StateIterator-Done (_fun _StateIterator-pointer -> _bool))
 
-(define-fst new-ArcIterator (_fun _Fst _StateId -> _ArcIterator-pointer))
-(define-fst ArcIterator-Value (_fun _ArcIterator-pointer -> _Arc))
+(define-fst delete-ArcIterator (_fun _ArcIterator-pointer -> _void)
+  #:wrap (deallocator))
+(define-fst new-ArcIterator (_fun _Fst _StateId -> _ArcIterator-pointer)
+  #:wrap (allocator delete-ArcIterator))
+(define-fst ArcIterator-Value (_fun _ArcIterator-pointer -> _Arc)
+  #:wrap (allocator delete-Arc))
 (define-fst ArcIterator-Next (_fun _ArcIterator-pointer -> _void))
 (define-fst ArcIterator-Done (_fun _ArcIterator-pointer -> _bool))
+
+
+;; Currently not in use
+;; ----------------------------------------------------------------------------
+
+(define-fst Fst-InputSymbols  (_fun _Fst -> (_or-null _SymbolTable-pointer)))
+(define-fst Fst-OutputSymbols (_fun _Fst -> (_or-null _SymbolTable-pointer)))
+
+(define-fst SymbolTable-NumSymbols (_fun _SymbolTable-pointer -> _size))
+(define-fst SymbolTable-GetNthKey  (_fun _SymbolTable-pointer _size -> _int64))
+(define-fst SymbolTable-Find       (_fun _SymbolTable-pointer _int64 -> _string))
+

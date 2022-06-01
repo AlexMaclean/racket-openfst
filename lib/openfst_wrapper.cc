@@ -1,11 +1,11 @@
 #include <fst/fstlib.h>
 
 #ifdef _WIN32
-    #define DllExport __declspec( dllexport )
-    #define TOKEN StringTokenType::UTF8
+#define DllExport __declspec(dllexport)
+#define TOKEN StringTokenType::UTF8
 #else
-    #define DllExport
-    #define TOKEN TokenType::UTF8
+#define DllExport
+#define TOKEN TokenType::UTF8
 #endif
 
 using namespace fst;
@@ -88,6 +88,11 @@ extern "C"
         return new StdVectorFst(StdProjectFst(*fst, projectType));
     }
 
+    DllExport void *delete_Fst(fst::StdMutableFst *fst)
+    {
+        delete fst;
+    }
+
     // Symbol Table -------------------------------------------------------
 
     DllExport size_t SymbolTable_NumSymbols(const SymbolTable *table)
@@ -120,6 +125,11 @@ extern "C"
         return fst;
     }
 
+    DllExport void delete_StringCompiler(StringCompiler<StdArc> *compiler)
+    {
+        delete compiler;
+    }
+
     // String Printer -------------------------------------------------------
 
     DllExport StringPrinter<StdArc> *new_StringPrinter()
@@ -132,6 +142,11 @@ extern "C"
         std::string *str = new std::string();
         (*printer)(*fst, str);
         return str->c_str();
+    }
+
+    DllExport void delete_StringPrinter(StringPrinter<StdArc> *printer)
+    {
+        delete printer;
     }
 
     // Scripts -------------------------------------------------------
@@ -165,7 +180,7 @@ extern "C"
         static const InputEpsilonMapper<fst::StdArc> ieps;
 
         Compose(StdRmEpsilonFst(ArcMapFst<StdArc, StdArc, OutputEpsilonMapper<StdArc>>(*ifst1, oeps)),
-            StdRmEpsilonFst(ArcMapFst<StdArc, StdArc, InputEpsilonMapper<StdArc>>(*ifst2, ieps)), ofst, opts);
+                StdRmEpsilonFst(ArcMapFst<StdArc, StdArc, InputEpsilonMapper<StdArc>>(*ifst2, ieps)), ofst, opts);
 
         ofst->SetInputSymbols(ifst1->InputSymbols());
         ofst->SetOutputSymbols(ifst2->OutputSymbols());
@@ -212,6 +227,11 @@ extern "C"
         return arc->nextstate;
     }
 
+    DllExport void delete_Arc(fst::StdArc *arc)
+    {
+        delete arc;
+    }
+
     // State Iterator -------------------------------------------------------
 
     DllExport fst::StateIterator<fst::StdFst> *new_StateIterator(fst::StdMutableFst *fst)
@@ -234,6 +254,11 @@ extern "C"
         return siter->Done();
     }
 
+    DllExport void delete_StateIterator(fst::StateIterator<fst::StdFst> *siter)
+    {
+        delete siter;
+    }
+
     // Arc Iterator -------------------------------------------------------
 
     DllExport fst::ArcIterator<fst::StdFst> *new_ArcIterator(fst::StdMutableFst *fst, int state)
@@ -254,5 +279,10 @@ extern "C"
     DllExport bool ArcIterator_Done(fst::ArcIterator<fst::StdFst> *aiter)
     {
         return aiter->Done();
+    }
+
+    DllExport void delete_ArcIterator(fst::ArcIterator<fst::StdFst> *aiter)
+    {
+        delete aiter;
     }
 }
