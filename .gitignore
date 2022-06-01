@@ -2,8 +2,6 @@
 \#*
 .\#*
 .DS_Store
-compiled/
-doc/
 *.so
 *.so.*
 *.la
@@ -20,3 +18,5 @@ lib/tmp
 *.js
 
 !openfst-x86_64*/*
+compiled/
+doc/
