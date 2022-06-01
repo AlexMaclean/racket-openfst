@@ -8,6 +8,7 @@ macosx: x86_64-macosx
 
 x86_64-macosx: openfst_wrapper.dylib libfst.25.dylib
 	cp -fv ./*.dylib ../openfst-x86_64-macosx
+	cp -fv ./*.dylib ../openfst
 
 openfst_wrapper.dylib: openfst_wrapper.cc libfst.25.dylib
 	g++ -arch x86_64 -fpic -shared -I/usr/local/include -L. -std=c++17 openfst_wrapper.cc -ldl -lfst -o openfst_wrapper.dylib
