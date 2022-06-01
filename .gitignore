@@ -12,6 +12,9 @@ lib/tmp
 *.dylib
 *.dll
 *.o
+*.lib
+*.obj
+*.exp
 
 *.css
 *.html

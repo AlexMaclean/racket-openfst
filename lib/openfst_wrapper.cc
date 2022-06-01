@@ -88,7 +88,7 @@ extern "C"
         return new StdVectorFst(StdProjectFst(*fst, projectType));
     }
 
-    DllExport void *delete_Fst(fst::StdMutableFst *fst)
+    DllExport void delete_Fst(fst::StdMutableFst *fst)
     {
         delete fst;
     }
