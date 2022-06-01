@@ -14,7 +14,7 @@
      (define fst (make-fst))
 
      (check-equal? (fst-num-states fst) 0)
-     (check-equal? (stream->list (fst-states fst)) '())
+     (check-equal? (fst-states fst) '())
      (check-equal? (fst-start fst) #f))
      (check-equal? (fst? fst) #t)
 
