@@ -25,14 +25,14 @@
 ;; ----------------------------------------------------------------------------
 
 (provide/contract
- [FST? (->/c any/c boolean?)]
- [Arc? (->/c any/c boolean?)])
+ [fst? (->/c any/c boolean?)]
+ [arc? (->/c any/c boolean?)])
 
-(struct FST (pointer))
-(struct Arc (pointer))
+(struct fst (pointer))
+(struct arc (pointer))
 
-(define _Fst (make-ctype (_cpointer 'StdMutableFst) FST-pointer FST))
-(define _Arc (make-ctype (_cpointer 'StdArc) Arc-pointer Arc))
+(define _Fst (make-ctype (_cpointer 'StdMutableFst) fst-pointer fst))
+(define _Arc (make-ctype (_cpointer 'StdArc) fst-pointer fst))
 
 (define _SymbolTable-pointer (_cpointer 'SymbolTable))
 (define _StringCompiler-pointer (_cpointer 'StringCompiler))

@@ -1,41 +1,43 @@
 #lang racket/base
 
-(require racket/contract racket/match racket/stream "wrapper.rkt")
+(require racket/contract racket/match "wrapper.rkt")
 
 (define label? (or/c exact-nonnegative-integer? char?))
 
 (provide/contract
- [rename new-Fst make-fst (-> FST?)]
- [rename Fst-AddState fst-add-state! (FST? . -> . exact-nonnegative-integer?)]
- [rename Fst-AddArc fst-add-arc! (FST? exact-nonnegative-integer? Arc? . -> . void?)]
- [rename Fst-SetStart fst-set-start! (FST? exact-nonnegative-integer? . -> . void?)]
- [rename Fst-SetFinal fst-set-final! (FST? exact-nonnegative-integer? real? . -> . void?)]
- [rename Fst-NumStates fst-num-states (FST? . -> . exact-nonnegative-integer?)]
- [rename Fst-NumArcs fst-num-arcs (FST? exact-nonnegative-integer? . -> . exact-nonnegative-integer?)]
- [rename Fst-Final fst-final (FST? exact-nonnegative-integer? . -> . real?)]
+ [rename new-Fst make-fst (-> fst?)]
+ [rename Fst-AddState fst-add-state! (fst? . -> . exact-nonnegative-integer?)]
+ [rename Fst-AddArc fst-add-arc! (fst? exact-nonnegative-integer? arc? . -> . void?)]
+ [rename Fst-SetStart fst-set-start! (fst? exact-nonnegative-integer? . -> . void?)]
+ [rename Fst-SetFinal fst-set-final! (fst? exact-nonnegative-integer? real? . -> . void?)]
+ [rename Fst-NumStates fst-num-states (fst? . -> . exact-nonnegative-integer?)]
+ [rename Fst-NumArcs fst-num-arcs (fst? exact-nonnegative-integer? . -> . exact-nonnegative-integer?)]
+ [rename Fst-Final fst-final (fst? exact-nonnegative-integer? . -> . real?)]
 
- [fst-states (FST? . -> . (stream/c exact-nonnegative-integer?))]
- [fst-arcs (FST? exact-nonnegative-integer? . -> . (stream/c Arc?))]
- [fst-start (FST? . -> . (or/c #f exact-nonnegative-integer?))]
+ [fst-states (fst? . -> . (listof exact-nonnegative-integer?))]
+ [fst-arcs (fst? exact-nonnegative-integer? . -> . (listof arc?))]
+ [fst-start (fst? . -> . (or/c #f exact-nonnegative-integer?))]
 
- [Arc (label? label? real? exact-nonnegative-integer?  . -> . Arc?)]
- [Arc-ilabel (Arc? . -> . exact-nonnegative-integer?)]
- [Arc-olabel (Arc? . -> . exact-nonnegative-integer?)]
- [Arc-weight (Arc? . -> . real?)]
- [rename Arc-nextstate Arc-next-state (Arc? . -> . exact-nonnegative-integer?)])
+ [arc (label? label? real? exact-nonnegative-integer?  . -> . arc?)]
+ [rename Arc-ilabel arc-ilabel (arc? . -> . exact-nonnegative-integer?)]
+ [rename Arc-olabel arc-olabel (arc? . -> . exact-nonnegative-integer?)]
+ [rename Arc-weight arc-weight (arc? . -> . real?)]
+ [rename Arc-nextstate arc-next-state (arc? . -> . exact-nonnegative-integer?)]
+
+ [arc? (any/c . -> . boolean?)])
 
 ;; Functions
 ;; ----------------------------------------------------------------------------
 
-(define (Arc ilabel olabel weight dest)
+(define (arc ilabel olabel weight dest)
   (new-Arc (label ilabel) (label olabel) (exact->inexact weight) dest))
 
 (define (fst-states fst)
-  (iterator->stream (new-StateIterator fst) StateIterator-Value
+  (iterator->list (new-StateIterator fst) StateIterator-Value
                     StateIterator-Done StateIterator-Next))
 
 (define (fst-arcs fst state)
-  (iterator->stream (new-ArcIterator fst state) ArcIterator-Value
+  (iterator->list (new-ArcIterator fst state) ArcIterator-Value
                     ArcIterator-Done ArcIterator-Next))
 
 (define (fst-start fst)
@@ -50,20 +52,7 @@
     [(? char?) (char->integer l)]
     [(? exact-integer?) l]))
 
-(define (SymbolTable->hash-table SymbolTable)
-  (for/hash ([pos (in-range (SymbolTable-NumSymbols SymbolTable))])
-    (let ([key (SymbolTable-GetNthKey SymbolTable pos)])
-      (values key (SymbolTable-Find SymbolTable key)))))
-
-(define (iterator->stream iter value done? next!)
-  (define (first)
-    (value iter))
-  (define (get-stream)
+(define (iterator->list iter value done? next!)
     (if (done? iter)
-      empty-stream
-      (stream-cons #:eager (first) (rest))))
-  (define (rest)
-    (next! iter)
-    (get-stream))
-
-  (get-stream))
+      '()
+      (cons (value iter) (begin (next! iter) (iterator->list iter value done? next!)))))

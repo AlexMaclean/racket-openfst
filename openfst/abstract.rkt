@@ -2,28 +2,32 @@
 
 (require "wrapper.rkt" racket/contract racket/match)
 
-(define fst-like? (or/c string? FST?))
 
 (provide/contract
  [fst-write (fst-like? path-string? . -> . void?)]
- [rename Fst-Read fst-read (path-string? . -> . FST?)]
- [fst-cross (fst-like? fst-like? . -> . FST?)]
+ [rename Fst-Read fst-read (path-string? . -> . fst?)]
+ [fst-cross (fst-like? fst-like? . -> . fst?)]
  [fst->string (fst-like? . -> . string?)]
- [fst-shortest-path ((fst-like?) (exact-positive-integer?) . ->* . FST?)]
- [fst-union   ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]
- [fst-compose ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]
- [fst-concat  ((fst-like?) #:rest (listof fst-like?) . ->* . FST?)]
- [fst-accept ((string?) (#:weight real?) . ->* . FST?)]
- [fst-difference (fst-like? fst-like? . -> . FST?)]
- [fst-project (fst-like? (or/c 'input 'output) . -> . FST?)])
+ [fst-shortest-path ((fst-like?) (exact-positive-integer?) . ->* . fst?)]
+ [fst-union   ((fst-like?) #:rest (listof fst-like?) . ->* . fst?)]
+ [fst-compose ((fst-like?) #:rest (listof fst-like?) . ->* . fst?)]
+ [fst-concat  ((fst-like?) #:rest (listof fst-like?) . ->* . fst?)]
+ [fst-accept ((string?) (#:weight real?) . ->* . fst?)]
+ [fst-difference (fst-like? fst-like? . -> . fst?)]
+ [fst-project (fst-like? (or/c 'input 'output) . -> . fst?)]
 
-(provide fst-like? FST?)
+ [fst-like? (any/c . -> . boolean?)]
+ [fst? (any/c . -> . boolean?)])
 
 ;; Functions
 ;; ----------------------------------------------------------------------------
 
 (define compiler (new-StringCompiler))
 (define printer (new-StringPrinter))
+
+
+(define (fst-like? v)
+  (or (string? v) (fst? v)))
 
 (define (fst->string fst)
   (StringPrinter-call printer (fst-like fst)))
