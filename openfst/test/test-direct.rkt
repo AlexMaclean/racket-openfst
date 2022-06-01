@@ -29,7 +29,7 @@
      (check-equal? (fst-num-states fst) 1)
      (check-equal? (fst-num-arcs fst s0) 1)
      (check-equal? (fst-start fst) s0)
-     (check-equal? (fst-final fst s0) 0.12)
+     (check-= (fst-final fst s0) 0.12 0.0001)
 
      (check-equal? (stream->list (fst-states fst)) (list s0))
      (check-equal? (length (stream->list (fst-arcs fst s0))) 1)
