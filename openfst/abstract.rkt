@@ -15,7 +15,8 @@
  [fst-compose ((fst-like?) #:rest (listof fst-like?) . ->* . fst?)]
  [fst-concat  ((fst-like?) #:rest (listof fst-like?) . ->* . fst?)]
  [fst-accept ((string?) (#:weight real?) . ->* . fst?)]
- [fst-closure ((fst?) (#:lower exact-nonnegative-integer? #:upper (and/c positive? (or/c exact-integer? infinite?))) . ->* . fst?)]
+ [fst-closure ((fst?) (#:lower exact-nonnegative-integer?
+                       #:upper (and/c positive? (or/c exact-integer? infinite?))) . ->* . fst?)]
  [fst-difference (fst-like? fst-like? . -> . fst?)]
  [fst-project (fst-like? (or/c 'input 'output) . -> . fst?)]
 

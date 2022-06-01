@@ -1,5 +1,5 @@
 #lang scribble/manual
-@require[@for-label[racket/base openfst racket/stream racket/contract]]
+@require[@for-label[racket/base openfst racket/stream racket/contract racket/math]]
 
 @title{OpenFst: Racket Bindings}
 
@@ -40,8 +40,8 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 }
 
-@defproc[(fst-difference [fst1 fst-like?] [fst2 fst-like?]) fst?]{
-
+@defproc[(fst-closure [fst fst-like?] [#:lower lower exact-nonnegative-integer? 0]
+                      [#:upper upper (and/c positive? (or/c exact-integer? infinite?)) +inf.0]) fst?]{
 }
 
 @defproc[(fst-union [fst fst-like?] ...+) fst?]{
@@ -56,9 +56,14 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 }
 
+@defproc[(fst-difference [fst1 fst-like?] [fst2 fst-like?]) fst?]{
+
+}
+
 @defproc[(fst-project [fst fst-like?] [type (or/c 'input 'output)]) fst?]{
 
 }
+
 
 @defproc[(fst-shortest-path [fst fst-like?] [n exact-positive-integer? 1]) fst?]{
 
@@ -182,22 +187,30 @@ memory From the presective of the user, however they conform to the @racket[stru
 
 @defproc[(arc [ilabel (or/c char? exact-nonnegative-integer?)]
               [olable (or/c char? exact-nonnegative-integer?)] [weight real?]
-                                 [next-state exact-nonnegative-integer?]) arc?]{
+              [next-state exact-nonnegative-integer?]) arc?]{
 
 }
 
-@deftogether[(
-             @defproc[(arc-ilabel (arc arc?)) exact-nonnegative-integer?]
-             @defproc[(arc-olabel (arc arc?)) exact-nonnegative-integer?]
-             @defproc[(arc-weight (arc arc?)) real?]
-             @defproc[(arc-next-state (arc arc?)) exact-nonnegative-integer?])
- ]{
+@deftogether[
+ (@defproc[(arc-ilabel (arc arc?)) exact-nonnegative-integer?]
+   @defproc[(arc-olabel (arc arc?)) exact-nonnegative-integer?]
+   @defproc[(arc-weight (arc arc?)) real?]
+   @defproc[(arc-next-state (arc arc?)) exact-nonnegative-integer?])]{
+                                                                      
 }
 
 
-@; [Arc (label? label? real? exact-nonnegative-integer?  . -> . Arc?)]
-@; [Arc-ilabel (Arc? . -> . exact-nonnegative-integer?)]
-@; [Arc-olabel (Arc? . -> . exact-nonnegative-integer?)]
-@; [Arc-weight (Arc? . -> . real?)]
-@; [rename Arc-nextstate Arc-next-state (Arc? . -> . exact-nonnegative-integer?)])
+@bibliography[
+ @bib-entry[#:key "pynini"	 	 	 	 
+            #:title "Pynini: A Python library for weighted finite-state grammar compilation"
+            #:author "K. Gorman"
+            #:date "2016"
+            #:location "Proc. ACL Workshop on Statistical NLP and Weighted Automata, 75-80"
+            #:url "https://pypi.org/project/pynini/"]
+ @bib-entry[#:key "openfst"
+            #:title "OpenFst: A General and Efficient Weighted Finite-State Transducer Library"
+            #:author "Cyril Allauzen, M. Riley, J. Schalkwyk, Wojciech Skut, Mehryar Mohri"
+            #:date "16 July 2007"
+            #:url "https://www.openfst.org"]
+ ]
 

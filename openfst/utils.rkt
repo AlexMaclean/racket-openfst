@@ -6,7 +6,7 @@
  [fst-add-weight (fst-like? real? . -> . fst?)]
  [fst-insert     ((fst-like?) (#:weight real?) . ->* . fst?)]
  [fst-delete     ((fst-like?) (#:weight real?) . ->* . fst?)]
- #;[fst-join       (fst-like? fst-like? . -> . fst?)]
+ [fst-join       (fst-like? fst-like? . -> . fst?)]
  [fst-rewrite (fst-like? string? . -> . (or/c string? #f))])
 
 ;; Functions
@@ -27,9 +27,8 @@
         (fst-add-weight result weight)
         result)))
 
-; (define (fst-join exp sep)
-;   (fst-concat exp (fst-closure (fst-concat sep exp))))
-
+(define (fst-join exp sep)
+  (fst-concat exp (fst-closure (fst-concat sep exp))))
 
 (define (fst-rewrite fst str)
   (define lattice (fst-compose str fst))

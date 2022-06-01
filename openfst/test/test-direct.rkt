@@ -59,22 +59,22 @@
      (check-equal? (fst-start (fst-shortest-path (fst-compose "AB" fst))) #f)
      (check-equal? (fst-start (fst-shortest-path (fst-compose "invalid" fst))) #f))
 
-     (test-case
-      "Transducer Arcs"
+    (test-case
+     "Transducer Arcs"
 
-      (define a1 (arc 4 5 0.2 1))
-      (define a2 (arc 4 5 0.2 1))
-      (define a3 (arc 4 4 0.2 1))
+     (define a1 (arc 4 5 0.2 1))
+     (define a2 (arc 4 5 0.2 1))
+     (define a3 (arc 4 4 0.2 1))
 
-      (check-equal? (equal? a1 a2) #t)
-      (check-equal? (equal? a1 a3) #f)
+     (check-equal? (equal? a1 a2) #t)
+     (check-equal? (equal? a1 a3) #f)
 
-      (check-equal? (arc-ilabel a1) 4)
-      (check-equal? (arc-olabel a1) 5)
-      (check-= (arc-weight a1) 0.2 0.00001)
-      (check-equal? (arc-next-state a1) 1))
+     (check-equal? (arc-ilabel a1) 4)
+     (check-equal? (arc-olabel a1) 5)
+     (check-= (arc-weight a1) 0.2 0.00001)
+     (check-equal? (arc-next-state a1) 1))
     )
-    'verbose)
+   'verbose)
   (void))
 
 (tests)

@@ -56,6 +56,6 @@
     [(? exact-integer?) l]))
 
 (define (iterator->list iter value done? next!)
-    (if (done? iter)
+  (if (done? iter)
       '()
       (cons (value iter) (begin (next! iter) (iterator->list iter value done? next!)))))

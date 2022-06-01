@@ -10,17 +10,16 @@
    (test-suite
     "OpenFst Abstract Manipulation"
 
-        (test-case
+    (test-case
      "Simple closure"
 
-        (define xor-fst (fst-closure (fst-union (fst-cross "0" "1") (fst-cross "1" "0"))))
+     (define xor-fst (fst-closure (fst-union (fst-cross "0" "1") (fst-cross "1" "0"))))
 
-        (check-equal? (fst-rewrite xor-fst "0101") "1010")
-        (check-equal? (fst-rewrite xor-fst "") "")
-        (check-equal? (fst-rewrite xor-fst "1011000") "0100111")
-        (check-equal? (fst-rewrite xor-fst "bogus") #f))
-    )
-    'verbose)
+     (check-equal? (fst-rewrite xor-fst "0101") "1010")
+     (check-equal? (fst-rewrite xor-fst "") "")
+     (check-equal? (fst-rewrite xor-fst "1011000") "0100111")
+     (check-equal? (fst-rewrite xor-fst "bogus") #f)))
+   'verbose)
   (void))
 
 (tests)
