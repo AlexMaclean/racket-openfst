@@ -173,8 +173,8 @@ Arcs representat transitions between states in an finite-state transuducer. Each
 in-label, an out-label, a weight and a next state. Arcs are added to the automata at the states
 from which they originate.
 
-As an implementation note, arc objects are infact pointers to underlying C++ objects in foreign memory.
-From the presective of the user, however they conform to the @racket[struct] interface.
+As an implementation note, arc objects are infact pointers to underlying C++ objects in foreign
+memory From the presective of the user, however they conform to the @racket[struct] interface.
 
 @defproc[(arc? [v any/c]) boolean?]{
  Returns @racket[#true] if the given @racket[v] is a fintite-state transducer arc.
