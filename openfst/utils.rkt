@@ -3,10 +3,10 @@
 (require "abstract.rkt" racket/contract)
 
 (provide/contract
- [fst-add-weight (fst-like? real? . -> . FST?)]
- [fst-insert     ((fst-like?) (#:weight real?) . ->* . FST?)]
- [fst-delete     ((fst-like?) (#:weight real?) . ->* . FST?)]
- #;[fst-join       (fst-like? fst-like? . -> . FST?)])
+ [fst-add-weight (fst-like? real? . -> . fst?)]
+ [fst-insert     ((fst-like?) (#:weight real?) . ->* . fst?)]
+ [fst-delete     ((fst-like?) (#:weight real?) . ->* . fst?)]
+ #;[fst-join       (fst-like? fst-like? . -> . fst?)])
 
 ;; Functions
 ;; ----------------------------------------------------------------------------
