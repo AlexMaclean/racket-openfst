@@ -11,19 +11,6 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 @section{Abstract Automata Manipulation}
 
-@; [fst-write (fst-like? path-string? . -> . void?)]
-@; [rename Fst-Read fst-read (path-string? . -> . fst?)]
-@; [fst-cross (fst-like? fst-like? . -> . fst?)]
-@; [fst->string (fst-like? . -> . string?)]
-@; [fst-shortest-path ((fst-like?) (exact-positive-integer?) . ->* . fst?)]
-@; [fst-union   ((fst-like?) #:rest (listof fst-like?) . ->* . fst?)]
-@; [fst-compose ((fst-like?) #:rest (listof fst-like?) . ->* . fst?)]
-@; [fst-concat  ((fst-like?) #:rest (listof fst-like?) . ->* . fst?)]
-@; [fst-accept ((string?) (#:weight real?) . ->* . fst?)]
-@; [fst-difference (fst-like? fst-like? . -> . fst?)]
-@; [fst-project (fst-like? (or/c 'input 'output) . -> . fst?)]
-@; [fst-like (fst-like? . -> . fst?)])
-
 @defproc[(fst? [v any/c]) boolean?]{
  Returns @racket[#true] if the given @racket[v] is a finite-state transducer.
 }
@@ -76,29 +63,46 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 @subsection{Derived Utilities}
 
-
-@;(provide/contract
-@; [fst-add-weight (fst-like? real? . -> . fst?)]
-@; [fst-insert     ((fst-like?) (#:weight real?) . ->* . fst?)]
-@; [fst-delete     ((fst-like?) (#:weight real?) . ->* . fst?)]
-@; #;[fst-join       (fst-like? fst-like? . -> . fst?)])
+@defmodule[openfst/utils]
 
 @defproc[(fst-add-weight [fst fst-like?] [weight real?]) fst?]{
+  Creates a new FST equivalent to @racket[fst], except that every path through
+  the FST has @racket[weight] added to it.
 
+  This is accomplished by adding an 𝛆 transition to the start of @racket[fst] with the given
+  @racket[weight].
 }
 
 @defproc[(fst-insert [fst fst-like?] [#:weight weight real? 0]) fst?]{
+  Create a new FST that accepts @racket[""] and produces the language of the given
+  @racket[fst]. This function is nearly equivalent to
+  @racket[(fst-cross "" fst)]. If a @racket[weight] is provided this weight is
+  applied to the resulting FST.
 
+  This function has the effect of replacing the input-label of every arc in the input
+  FST with 𝛆.
 }
 
 @defproc[(fst-delete [fst fst-like?] [#:weight weight real? 0]) fst?]{
+  Create a new FST that accepts the language of the given @racket[fst] and
+  produces @racket[""]. This function is nearly equivalent to
+  @racket[(fst-cross fst "")]. If a @racket[weight] is provided this weight is
+  applied to the resulting FST.
 
+  This function has the effect of replacing the output-label of every arc in the input
+  FST with 𝛆.
 }
 
 @defproc[(fst-join [fst1 fst-like?] [fst2 fst-like?]) fst?]{
-
+  Create a new FST that is equivalent to (@racket[fst1] (@racket[fst2] @racket[fst1])*)
 }
 
+@defproc[(fst-rewrite [fst fst-like?] [input string?]) (or/c string #f)]{
+  rewrites the given input string with the given FST. If the FST cannot accept @racket[input] then
+  @racket[#f] is returned, otherwise the rewritten string is returned. If the FST can accept the
+  input string this is equivalent to
+  @racket[(fst->string (fst-shortest-path (fst-compose input fst)))].
+}
 
 
 @section{Direct Automata Access}
@@ -109,12 +113,12 @@ This package is definitely a work in progress. Apologies for the current incompl
 }
 
 @defproc[(fst-add-state! [fst fst?]) exact-nonnegative-integer?]{
- Mutate the given @racket[fst] adding a new state and returns that state's id. Genrally states
+ Mutate the given @racket[fst] adding a new state and returns that state's id. Generally states
  start at 0 and increase sequentially, but probably not a good idea to count on this.
 }
 
 @defproc[(fst-add-arc! [fst fst?] [state exact-nonnegative-integer?] [arc arc?]) void?]{
- Mutates the given @racket[fst] adding a transition @racket[arc] initiating at @racket[state]. 
+ Mutates the given @racket[fst] adding a transition @racket[arc] initiating at @racket[state].
 }
 
 @defproc[(fst-set-start! [fst fst?] [state exact-nonnegative-integer?]) void?]{
@@ -132,12 +136,12 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 @defproc[(fst-num-states [fst fst?]) exact-nonnegative-integer?]{
  Returns the total number of states in @racket[fst].
- This is equivalent to @racket[(stream-length (fst-states fst))], though somewhat more efficient.                                            
+ This is equivalent to @racket[(length (fst-states fst))], though somewhat more efficient.
 }
 
 @defproc[(fst-num-arcs [fst fst?] [state exact-nonnegative-integer?]) exact-nonnegative-integer?]{
  Returns the total number of arcs coming from @racket[state] in @racket[fst].
- This is equivalent to @racket[(stream-length (fst-arcs fst state))], though somewhat more efficient.    
+ This is equivalent to @racket[(length (fst-arcs fst state))], though somewhat more efficient.
 }
 
 @defproc[(fst-start [fst fst?]) (or/c #f exact-nonnegative-integer?)]{
@@ -153,7 +157,7 @@ This package is definitely a work in progress. Apologies for the current incompl
 }
 
 @defproc[(fst-states [fst fst?]) (listof exact-nonnegative-integer?)]{
- Returns a lazy stream of the state ids present in @racket[fst]. 
+ Returns a list of the state ids present in @racket[fst].
 
  Example:
  @racketblock[
@@ -163,7 +167,7 @@ This package is definitely a work in progress. Apologies for the current incompl
 }
 
 @defproc[(fst-arcs [fst fst?] [state exact-nonnegative-integer?]) (listof arc?)]{
- Returns a lazy stream of the arcs originating from @racket[state] in @racket[fst].
+ Returns a list of the arcs originating from @racket[state] in @racket[fst].
 
  Example:
  @racketblock[
@@ -174,15 +178,15 @@ This package is definitely a work in progress. Apologies for the current incompl
 
 @subsection{Transition Arcs}
 
-Arcs representat transitions between states in an finite-state transuducer. Each arc consists of a
+Arcs represented transitions between states in an finite-state transducer. Each arc consists of a
 in-label, an out-label, a weight and a next state. Arcs are added to the automata at the states
 from which they originate.
 
-As an implementation note, arc objects are infact pointers to underlying C++ objects in foreign
-memory From the presective of the user, however they conform to the @racket[struct] interface.
+As an implementation note, arc objects are in fact pointers to underlying C++ objects in foreign
+memory. From the perspective of the user, however they conform to the @racket[struct] interface.
 
 @defproc[(arc? [v any/c]) boolean?]{
- Returns @racket[#true] if the given @racket[v] is a fintite-state transducer arc.
+ Returns @racket[#true] if the given @racket[v] is a finite-state transducer arc.
 }
 
 @defproc[(arc [ilabel (or/c char? exact-nonnegative-integer?)]
@@ -196,12 +200,12 @@ memory From the presective of the user, however they conform to the @racket[stru
    @defproc[(arc-olabel (arc arc?)) exact-nonnegative-integer?]
    @defproc[(arc-weight (arc arc?)) real?]
    @defproc[(arc-next-state (arc arc?)) exact-nonnegative-integer?])]{
-                                                                      
+
 }
 
 
 @bibliography[
- @bib-entry[#:key "pynini"	 	 	 	 
+ @bib-entry[#:key "pynini"
             #:title "Pynini: A Python library for weighted finite-state grammar compilation"
             #:author "K. Gorman"
             #:date "2016"
