@@ -25,9 +25,10 @@ jobs:
       - name: Installing openfst native libararies (Windows)
         if: ${{ matrix.platform == 'windows-latest' }}
         run: raco pkg install -t dir openfst-x86_64-win32/
-      - if: ${{ matrix.platform == 'macos-latest' }}
+      - name: Installing openfst native libararies (Mac OSX)
+        if: ${{ matrix.platform == 'macos-latest' }}
         run: raco pkg install -t dir openfst-x86_64-macosx/
-        
+
       - name: Installing openfst
         run: raco pkg install -t dir openfst/
       - name: Compiling openfst and building its docs

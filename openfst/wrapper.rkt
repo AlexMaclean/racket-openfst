@@ -35,7 +35,7 @@
   [(define (equal-proc arc1 arc2 recursive-equal?)
      (and (= (Arc-ilabel arc1) (Arc-ilabel arc2))
           (= (Arc-olabel arc1) (Arc-olabel arc2))
-          (= (Arc-weight arc1) (Arc-weight arc2))
+          (> 1e-10 (abs (- (Arc-weight arc1) (Arc-weight arc2))))
           (= (Arc-nextstate arc1) (Arc-nextstate arc2))))
 
    (define (hash-proc arc recursive-equal-hash)
