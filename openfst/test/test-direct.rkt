@@ -66,7 +66,7 @@
      (define a2 (arc 4 5 0.2 1))
      (define a3 (arc 4 4 0.2 1))
 
-     (check-equal? (equal? a1 a2) #t)
+     (check-equal? a1 a2)
      (check-equal? (equal? a1 a3) #f)
 
      (check-equal? (arc-ilabel a1) 4)
