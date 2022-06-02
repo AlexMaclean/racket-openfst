@@ -293,7 +293,7 @@ extern "C"
         return arc->olabel;
     }
 
-    DllExport int Arc_weight(fst::StdArc *arc)
+    DllExport float Arc_weight(fst::StdArc *arc)
     {
         return arc->weight.Value();
     }
