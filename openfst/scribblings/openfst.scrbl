@@ -169,7 +169,7 @@ computations exist for some strings.
  #:eval helper-eval
  (fst-rewrite (fst-cross "hello" "world") "hello")
  ]
- 
+
 }
 
 @defproc[(fst-closure [fst fst-like?] [#:lower lower exact-nonnegative-integer? 0]
@@ -177,7 +177,7 @@ computations exist for some strings.
  Produces an FST that accepts strings in the language of @racket[fst] repeated between @racket[lower]
  and @racket[upper] times. If @racket[upper] is @racket[#false], then strings may be repeated an
  infinite number of times.
- 
+
  @itemlist[
  @item{@racket[(fst-closure fst)] is equivalent to the Kleene @tt{*}.}
  @item{@racket[(fst-closure fst #:lower 1)] is equivalent to the Kleene @tt{+}.}
@@ -191,7 +191,7 @@ computations exist for some strings.
  (fst-rewrite f "AA")
  (fst-rewrite f "A")
  ]
- 
+
 }
 
 @defproc[(fst-union [fst fst-like?] ...+) fst?]{
@@ -234,11 +234,11 @@ computations exist for some strings.
  (fst->string (fst-project A->B 'input))
  (fst->string (fst-project A->B 'output))
  ]
- 
+
 }
 
 @defproc[(fst-shortest-path [fst fst-like?] [n exact-positive-integer? 1]) fst?]{
- Constructs a new FST representing the @racket[n] shortest paths through the given FST. 
+ Constructs a new FST representing the @racket[n] shortest paths through the given FST.
 }
 
 @defproc[(fst->string [fst fst-like?]) string?]{
@@ -462,5 +462,8 @@ memory. From the perspective of the user, however they conform to the @racket[st
             #:author "Cyril Allauzen, M. Riley, J. Schalkwyk, Wojciech Skut, Mehryar Mohri"
             #:date "16 July 2007"
             #:url "https://www.openfst.org"]
+ @bib-entry[#:key "winfst"
+            #:title "OpenFST port for Windows"
+            #:url "https://github.com/kkm000/openfst"]
  ]
 
