@@ -22,7 +22,7 @@ A weighted finite-state transducers (FSTs) is a type of automata that consists o
   represent non-final states).}
  @item{A set of arcs (or transitions) between states, consisting of a current and a next state,
   an input and output label, and a weight. labels are integers representing the unicode encoding
- of characters with 0 represinging ε, or no-character.}
+ of characters with 0 representing ε, or no-character.}
  @item{A special state designated as the start state, from which computation begins. Empty or
   non-sane FSTs may lack a start state.}]
 
@@ -151,7 +151,7 @@ computations exist for some strings.
 @section{Abstract Automata Manipulation}
 
 @defproc[(fst? [v any/c]) boolean?]{
- Returns @racket[#true] if the given @racket[v] is a finite-state transducer. 
+ Returns @racket[#true] if the given @racket[v] is a finite-state transducer.
 }
 
 @defproc[(fst-like? [v any/c]) boolean?]{
@@ -162,12 +162,12 @@ computations exist for some strings.
 @defproc[(fst-accept [str string?] [#:weight weight real? 0]) fst?]{
  Constructs a new FST that accepts the given @racket[str] at the given @racket[weight].
  This FST takes the form of a chain of states each connected to the next by a single
- arc with weight 0 and an input and output lable corresponding to a character in the
+ arc with weight 0 and an input and output label corresponding to a character in the
  input string. The final state has a weight of @racket[weight].
 }
 
 @defproc[(fst-cross [fst1 fst-like?] [fst2 fst-like?]) fst?]{
- Creates a new FST that accepts input strings from the langauge of @racket[fst1] and
+ Creates a new FST that accepts input strings from the language of @racket[fst1] and
  produces output strings in the language of @racket[fst2].
 
  @examples[
@@ -201,12 +201,12 @@ computations exist for some strings.
 
 @defproc[(fst-union [fst fst-like?] ...+) fst?]{
  Create a new FST representing the union (or sum) of the given FSTs. The resulting FSTs will transduce
- all the strings in the input FSTs to all the correpsonding ouput strings.
+ all the strings in the input FSTs to all the corresponding output strings.
 }
 
 @defproc[(fst-compose [fst fst-like?] ...+) fst?]{
  Create a new FST that has the effect of applying each of the given FSTs in order. This operation
- is also useful because it can be used to rewrite a string repersended as an acceptor FST.
+ is also useful because it can be used to rewrite a string represented as an acceptor FST.
 
  @examples[
  #:eval helper-eval
@@ -217,8 +217,8 @@ computations exist for some strings.
 }
 
 @defproc[(fst-concat [fst fst-like?] ...+) fst?]{
- Construct a new FST that transduces strings that are a concatentation of the strings of the input
- FST.
+ Construct a new FST that transducer strings that are a concatenation of the strings of the input
+ FSTs.
 
  @examples[
  #:eval helper-eval
@@ -230,8 +230,8 @@ computations exist for some strings.
 
 @defproc[(fst-project [fst fst-like?] [type (or/c 'input 'output)]) fst?]{
  Given a transducer @racket[fst], produces an acceptor that accepts either the input or the
- output language. This is accomplished by replacing the in-lables of every arc with the out-lables
- or vice verssa.
+ output language. This is accomplished by replacing the in-labels of every arc with the out-labels
+ or vice versa.
 
  @examples[
  #:eval helper-eval
@@ -247,13 +247,13 @@ computations exist for some strings.
 }
 
 @defproc[(fst->string [fst fst-like?]) string?]{
- If there is only one possible path through the given FST prodcues a string by walking
- this path and adding all output-lables to a string. If there
+ If there is only one possible path through the given FST produces a string by walking
+ this path and adding all output-labels to a string. If there
  are multiple paths an error is printed and @racket[""] is returned.
 }
 
 @defproc[(fst-inverse [fst fst-like?]) fst?]{
- Creates a new FST that has oposite input and output langages as the given @racket[fst]. This is
+ Creates a new FST that has opposite input and output languages as the given @racket[fst]. This is
  accomplished by switching the input and output labels on every arc.
 
   @examples[
@@ -460,9 +460,9 @@ This library currently only supports @tt{x86_64} architecture. Getting it workin
 hardware @italic{should} be as simple as running the build script corresponding to the OS
 in the @tt{lib/} directory of the GitHub Repo, but I haven't tested this...
 
-While it should not be visible to the consumers of this library, the Windows implemenation of
-this library is using an unoffical port of OpenFST @cite["winfst"] Because the offical OpenFST
-distrobution does not support Windows. 
+While it should not be visible to the consumers of this library, the Windows implementation of
+this library is using an unofficial port of OpenFST @cite["winfst"] Because the official OpenFST
+distribution does not support Windows.
 
 @bibliography[
  @bib-entry[#:key "pynini"
