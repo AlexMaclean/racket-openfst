@@ -10,7 +10,7 @@
 
 This package provides Racket bindings for OpenFst, "a library for constructing, combining,
 optimizing, and searching @italic{weighted finite-state transducers} (FSTs)" @cite["openfst"]. We also
-provide extensions to OpenFst based the Python package @tt{pynini} @cite["pynini"].
+provide extensions to OpenFst based on the Python package @tt{pynini} @cite["pynini"].
 
 @section{Getting Started}
 
@@ -20,14 +20,14 @@ A weighted finite-state transducers (FSTs) is a type of automata that consists o
  @item{A set of states, represented by natural numbers. Each state is also assigned a final
   weight representing the weight of terminating computation in this state (Infinity is used to
   represent non-final states).}
- @item{A set of arc (or transitions) between states, consisting of a current and a next state,
-  an input and output label, and a weight}
+ @item{A set of arcs (or transitions) between states, consisting of a current and a next state,
+  an input and output label, and a weight.}
  @item{A special state designated as the start state, from which computation begins. Empty or
-  non-sane FSTs may lack a start state}]
+  non-sane FSTs may lack a start state.}]
 
 This library provides a high- and low-level for interacting with FSTs. The high-level abstract
-functional interface contains a functions
-over FSTs such as @racket[fst-union] and @racket[fst-compose]. the low-level direct interface
+functional interface contains functions
+over FSTs such as @racket[fst-union] and @racket[fst-compose]. The low-level direct interface
 allows for inspection and stateful mutation and of the structure of an FST.
 
 @subsection{Example: Thousand Separators}
@@ -38,7 +38,7 @@ every third digit as thousand separators, that is:
  @racket["7577130400"] → @racket["7,577,130,400"]
 }
 
-To do this we first define an FST that accepts any single digit called @racket[digit]. Next we
+To do this, we first define an FST that accepts any single digit called @racket[digit]. Next, we
 take the closure over this FST with a lower and upper bound of 3. The resulting FST, @racket[digits3],
 will accept only strings of exactly 3 digits and rewrite them unchanged.
 
@@ -53,15 +53,17 @@ insert a comma before every 3rd digit. Finally we concatenate this FST with an F
 digits representing the leading digit of the number, to produce @racket[add-commas-fst].
 
 @racketblock[
- (define digits3* (fst-closure (fst-concat (fst-cross "" ",") digits3)))
- (define add-commas-fst (fst-concat (fst-closure digit #:lower 1 #:upper 3)
-                                    digits3*))
+ (define digits3*
+   (fst-closure (fst-concat (fst-cross "" ",") digits3)))
+ (define add-commas-fst
+   (fst-concat (fst-closure digit #:lower 1 #:upper 3)
+               digits3*))
  ]
 
 To actually apply this FST to a string we use @racket[fst-compose] to implicitly convert the
 string to an FST itself and then compose that FST with the one we build for thousand separation.
-Finally we convert the resulting FST back into a string. For the purposes of this example we do
-this explicitly but @racket[fst-rewrite] wraps this functionality up nicely.
+Finally, we convert the resulting FST back into a string. For the purposes of this example we do
+this explicitly, but @racket[fst-rewrite] wraps this functionality up nicely.
 
 @racketblock[
  (define (add-commas number-string)
@@ -93,13 +95,13 @@ this explicitly but @racket[fst-rewrite] wraps this functionality up nicely.
 
 @subsection{Example: Leading Zeros}
 
-To see how weights can be applied to FSTs consider the problem of removing leading zeros from
-a number. While this task can be accomplished with an unweighted-FST introducing weights
+To see how weights can be applied to FSTs, consider the problem of removing leading zeros from
+a number. While this task can be accomplished with an unweighted-FST, introducing weights
 simplifies the solution.
 
 The leading-zero removing transducer is defined as the concatenation of an FST that removes zero
 or more @racket["0"]s and an FST that accepts one or more digits. While the second FST could process
-the leading @racket["0"]s without removing them this path will have more weight associated with it.
+the leading @racket["0"]s without removing them, this path will have more weight associated with it.
 
 @racketblock[
  (define leading-0s
@@ -108,7 +110,7 @@ the leading @racket["0"]s without removing them this path will have more weight 
  ]
 
 Note that this FST can be composed with the thousand separator from the previous problem into a
-single new FST. When applying this FST @racket[fst-shortest-path] must be used since now multiple
+single new FST. When applying this FST, @racket[fst-shortest-path] must be used since now multiple
 computations exist for some strings.
 
 @racketblock[
@@ -117,7 +119,7 @@ computations exist for some strings.
  (define (cleanup-number number-string)
    (fst->string
     (fst-shortest-path
-     (fst-compose number-string add-commas-fst))))
+     (fst-compose number-string cleanup-fst))))
  ]
 
 @interaction-eval[
@@ -144,7 +146,8 @@ computations exist for some strings.
 @section{Abstract Automata Manipulation}
 
 @defproc[(fst? [v any/c]) boolean?]{
- Returns @racket[#true] if the given @racket[v] is a finite-state transducer.
+ Returns @racket[#true] if the given @racket[v] is a finite-state transducer. Nearly all of the
+ following functions accept FST-like arguments and convert strings to FSTs with @racket[fst-accept].
 }
 
 @defproc[(fst-like? [v any/c]) boolean?]{
@@ -152,44 +155,141 @@ computations exist for some strings.
 }
 
 @defproc[(fst-accept [str string?] [#:weight weight real? 0]) fst?]{
-
+ Constructs a new FST that accepts the given @racket[str] at the given @racket[weight].
+ This FST takes the form of a chain of states each connected to the next by a single
+ arc with weight 0 and an input and output lable corresponding to a character in the
+ input string. The final state has a weight of @racket[weight].
 }
 
 @defproc[(fst-cross [fst1 fst-like?] [fst2 fst-like?]) fst?]{
+ Creates a new FST that accepts input strings from the langauge of @racket[fst1] and
+ produces output strings in the language of @racket[fst2].
 
+ @examples[
+ #:eval helper-eval
+ (fst-rewrite (fst-cross "hello" "world") "hello")
+ ]
+ 
 }
 
 @defproc[(fst-closure [fst fst-like?] [#:lower lower exact-nonnegative-integer? 0]
                       [#:upper upper (or/c #f exact-positive-integer?) #f]) fst?]{
+ Produces an FST that accepts strings in the language of @racket[fst] repeated between @racket[lower]
+ and @racket[upper] times. If @racket[upper] is @racket[#false], then strings may be repeated an
+ infinite number of times.
+ 
+ @itemlist[
+ @item{@racket[(fst-closure fst)] is equivalent to the Kleene @tt{*}.}
+ @item{@racket[(fst-closure fst #:lower 1)] is equivalent to the Kleene @tt{+}.}
+ @item{@racket[(fst-closure fst #:upper 1)] is equivalent to the @tt{?}.}
+ ]
+
+ @examples[
+ #:eval helper-eval
+ (define f (fst-closure (fst-cross "A" "B") #:lower 2))
+ (fst-rewrite f "AAAAA")
+ (fst-rewrite f "AA")
+ (fst-rewrite f "A")
+ ]
+ 
 }
 
 @defproc[(fst-union [fst fst-like?] ...+) fst?]{
-
+ Create a new FST representing the union (or sum) of the given FSTs. The resulting FSTs will transduce
+ all the strings in the input FSTs to all the correpsonding ouput strings.
 }
 
 @defproc[(fst-compose [fst fst-like?] ...+) fst?]{
+ Create a new FST that has the effect of applying each of the given FSTs in order. This operation
+ is also useful because it can be used to rewrite a string repersended as an acceptor FST.
 
+ @examples[
+ #:eval helper-eval
+ (define more+s (fst-closure (fst-cross "+" "++")))
+ (fst->string (fst-compose "+" more+s))
+ (fst->string (fst-compose "+" more+s more+s more+s))
+ ]
 }
 
 @defproc[(fst-concat [fst fst-like?] ...+) fst?]{
+ Construct a new FST that transduces strings that are a concatentation of the strings of the input
+ FST.
 
-}
-
-@defproc[(fst-difference [fst1 fst-like?] [fst2 fst-like?]) fst?]{
-
+ @examples[
+ #:eval helper-eval
+ (define f (fst-concat (fst-cross "a" "b") (fst-cross "x" "y")))
+ (fst-rewrite f "ax")
+ (fst-rewrite f "a")
+ ]
 }
 
 @defproc[(fst-project [fst fst-like?] [type (or/c 'input 'output)]) fst?]{
+ Given a transducer @racket[fst], produces an acceptor that accepts either the input or the
+ output language. This is accomplished by replacing the in-lables of every arc with the out-lables
+ or vice verssa.
 
+ @examples[
+ #:eval helper-eval
+ (define A->B (fst-cross "A" "B"))
+ (fst->string (fst-project A->B 'input))
+ (fst->string (fst-project A->B 'output))
+ ]
+ 
 }
 
-
 @defproc[(fst-shortest-path [fst fst-like?] [n exact-positive-integer? 1]) fst?]{
-
+ Constructs a new FST representing the @racket[n] shortest paths through the given FST. 
 }
 
 @defproc[(fst->string [fst fst-like?]) string?]{
+ If there is only one possible path through the given FST prodcues a string by walking
+ this path and adding all output-lables to a string. If there
+ are multiple paths an error is printed and @racket[""] is returned.
+}
 
+@defproc[(fst-inverse [fst fst-like?]) fst?]{
+ Creates a new FST that has oposite input and output langages as the given @racket[fst]. This is
+ accomplished by switching the input and output labels on every arc.
+
+  @examples[
+ #:eval helper-eval
+ (define f (fst-inverse (fst-cross "hello" "world")))
+ (fst-rewrite f "world")
+ ]
+}
+
+@defproc[(fst-reverse [fst fst-like?]) fst?]{
+ Creates a new FST that accepts the reverse of the strings in the given FST and produces the reverse
+ of the products.
+
+ @examples[
+ #:eval helper-eval
+ (define f (fst-reverse (fst-cross "hello" "world")))
+ (fst-rewrite f "olleh")
+ ]
+}
+
+@defproc[(fst-optimize [fst fst-like?]) fst?]{
+Creates a new FST with the same effect as the provided FST but possibly with fewer states and
+arcs.
+}
+
+@defproc[(fst-difference [fst1 fst-like?] [fst2 fst-like?]) fst?]{
+ Create an FST acceptor that accepts all strings accepted by @racket[fst1], except those accepted
+ by @racket[fst2]. Both input FSTs must be acceptors.
+
+  @examples[
+ #:eval helper-eval
+ (define f (fst-difference (fst-union "a" "b" "c") "c"))
+ (fst-rewrite f "a")
+ (fst-rewrite f "c")
+ ]
+}
+
+
+@defproc[(fst-sane? [fst fst-like?]) boolean?]{
+ Performs a sanity check on the given FST returning @racket[#true] if all arc point to valid
+ states and there is a start state for non-empty FSTs.
 }
 
 
@@ -318,7 +418,7 @@ computations exist for some strings.
 @subsection{Transition Arcs}
 
 Arcs represented transitions between states in an finite-state transducer. Each arc consists of a
-in-label, an out-label, a weight and a next state. Arcs are added to the automata at the states
+in-label, an out-label, a weight, and a next state. Arcs are added to the automata at the states
 from which they originate.
 
 As an implementation note, arc objects are in fact pointers to underlying C++ objects in foreign
@@ -345,7 +445,7 @@ memory. From the perspective of the user, however they conform to the @racket[st
    @defproc[(arc-next-state (arc arc?)) exact-nonnegative-integer?])]{
  Accessor methods for an arc object. Note that even when arcs are constructed with character
  labels these values are represented internal as integers so @racket[arc-ilabel] and
- @racket[arc-olable] will return the corresponding integer.
+ @racket[arc-olabel] will return the corresponding integer.
 
 }
 

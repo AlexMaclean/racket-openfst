@@ -268,8 +268,15 @@ extern "C"
 
     DllExport fst::StdMutableFst *Fst_Difference(fst::StdMutableFst *ifst1, fst::StdMutableFst *ifst2)
     {
+        fst::StdVectorFst fst2;
+        fst::StdVectorFst ofst2;
+        RmEpsilon(&fst2);
+        Determinize(fst2, &ofst2);
+
+        static const ILabelCompare<fst::StdArc> comp;
+        ArcSort(&ofst2, comp);
         StdVectorFst *ofst = new StdVectorFst();
-        Difference(*ifst1, *ifst2, ofst);
+        Difference(*ifst1, ofst2, ofst);
         return ofst;
     }
 

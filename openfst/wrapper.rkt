@@ -67,7 +67,7 @@
 
 (define _StateId _int)
 
-(define _ProjectType (_enum '(PROJECT_INPUT PROJECT_OUTPUT)))
+(define _ProjectType (_enum '(PROJECT_OUTPUT PROJECT_INPUT)))
 
 ;; Functions
 ;; ----------------------------------------------------------------------------

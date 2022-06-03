@@ -20,9 +20,9 @@
                        #:upper (or/c exact-positive-integer? #f)) . ->* . fst?)]
  [fst-difference (fst-like? fst-like? . -> . fst?)]
  [fst-project (fst-like? (or/c 'input 'output) . -> . fst?)]
- [fst-inverse (fst-like? . -> . fst-like?)]
- [fst-reverse (fst-like? . -> . fst-like?)]
- [fst-optimize (fst-like? . -> . fst-like?)]
+ [fst-inverse (fst-like? . -> . fst?)]
+ [fst-reverse (fst-like? . -> . fst?)]
+ [fst-optimize (fst-like? . -> . fst?)]
  [fst-sane? (fst-like? . -> . boolean?)]
 
  [fst-like? (any/c . -> . boolean?)]

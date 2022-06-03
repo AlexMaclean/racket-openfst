@@ -1,6 +1,7 @@
 #lang racket
 
 (require "../main.rkt"
+         "../utils.rkt"
          rackunit
          rackunit/text-ui)
 
@@ -73,7 +74,29 @@
      (check-equal? (arc-olabel a1) 5)
      (check-= (arc-weight a1) 0.2 0.00001)
      (check-equal? (arc-next-state a1) 1))
-    )
+
+    (test-case
+     "Tricky FST construction (add1)"
+     (define add1*
+       (make-fst
+        '((start 0)
+          (#\0 #\1 0 done)
+          (#\1 #\0 0 carry))
+        '(carry
+          (#\0 #\1 0 done)
+          (#\1 #\0 0 carry)
+          (0 #\1 0 very-done))
+        '((done 0)
+          (#\0 #\0 0 done)
+          (#\1 #\1 0 done))
+        '((very-done 0))))
+
+     (define add1 (fst-reverse add1*))
+
+     (check-equal? (fst-rewrite add1 "0") "1")
+     (check-equal? (fst-rewrite add1 "10") "11")
+     (check-equal? (fst-rewrite add1 "11") "100")
+     (check-equal? (fst-rewrite add1 "1001011") "1001100")))
    'verbose)
   (void))
 
