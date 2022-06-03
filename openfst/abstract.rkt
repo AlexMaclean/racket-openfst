@@ -8,6 +8,7 @@
 (provide/contract
  [fst-write (fst-like? path-string? . -> . void?)]
  [rename Fst-Read fst-read (path-string? . -> . fst?)]
+ 
  [fst-cross (fst-like? fst-like? . -> . fst?)]
  [fst->string (fst-like? . -> . string?)]
  [fst-shortest-path ((fst-like?) (exact-positive-integer?) . ->* . fst?)]
@@ -16,7 +17,7 @@
  [fst-concat  ((fst-like?) #:rest (listof fst-like?) . ->* . fst?)]
  [fst-accept ((string?) (#:weight real?) . ->* . fst?)]
  [fst-closure ((fst?) (#:lower exact-nonnegative-integer?
-                       #:upper (and/c positive? (or/c exact-integer? infinite?))) . ->* . fst?)]
+                       #:upper (or/c exact-positive-integer? #f)) . ->* . fst?)]
  [fst-difference (fst-like? fst-like? . -> . fst?)]
  [fst-project (fst-like? (or/c 'input 'output) . -> . fst?)]
 
@@ -46,7 +47,7 @@
   (repeated-apply Fst-Concat (cons fst1 fsts)))
 
 (define (fst-accept str #:weight [weight 0.0])
-  (StringCompiler-call compiler str weight))
+  (StringCompiler-call compiler str (exact->inexact weight)))
 
 (define (fst-cross fst1 fst2)
   (Fst-Cross (fst-like fst1) (fst-like fst2)))
@@ -63,10 +64,10 @@
                  ['input 'PROJECT_INPUT]
                  ['output 'PROJECT_OUTPUT])))
 
-(define (fst-closure fst #:lower [lower 0] #:upper [upper +inf.0])
-  (when (lower . > . upper)
+(define (fst-closure fst #:lower [lower 0] #:upper [upper #f])
+  (when (and upper (lower . > . upper))
     (error 'fst-closure "lower bound ~e is greater than upper bound ~e" lower upper))
-  (Fst-Closure (fst-like fst) lower (if (equal? upper +inf.0) 0 upper)))
+  (Fst-Closure (fst-like fst) lower (or upper 0)))
 
 (define (fst-like arg)
   (if (string? arg) (fst-accept arg) arg))
