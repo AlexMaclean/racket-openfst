@@ -26,7 +26,8 @@
  [rename Arc-weight arc-weight (arc? . -> . real?)]
  [rename Arc-nextstate arc-next-state (arc? . -> . exact-nonnegative-integer?)]
 
- [arc? (any/c . -> . boolean?)])
+ [arc? (any/c . -> . boolean?)]
+ [label (any/c . -> . boolean?)])
 
 ;; Functions
 ;; ----------------------------------------------------------------------------
@@ -59,7 +60,7 @@
   ;; Unless teh FST is empty assign the first state provided as the start state.
   (unless (equal? states '())
     (Fst-SetStart fst (hash-ref state-ids (state-def-id (car states)))))
-  
+
   fst)
 
 (define (arc ilabel olabel weight dest)

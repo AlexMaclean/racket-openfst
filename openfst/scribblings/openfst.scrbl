@@ -10,7 +10,7 @@
 
 This package provides Racket bindings for OpenFst, "a library for constructing, combining,
 optimizing, and searching @italic{weighted finite-state transducers} (FSTs)" @cite["openfst"]. We also
-provide extensions to OpenFst based the Python package @tt{pynini} @cite["pynini"]. 
+provide extensions to OpenFst based the Python package @tt{pynini} @cite["pynini"].
 
 @section{Getting Started}
 
@@ -61,7 +61,7 @@ digits representing the leading digist of the number, to produce @racket[add-com
 To acctually apply this FST to a string we use @racket[fst-compose] to implicitly convert the
 string to an FST itself and then compose that FST with the one we build for thousand separation.
 Finally we convert the resulting FST back into a string. For the purposes of this example we do
-this explificly but @racket[fst-rewrite] wraps this functionallity up nicely. 
+this explificly but @racket[fst-rewrite] wraps this functionallity up nicely.
 
 @racketblock[
  (define (add-commas number-string)
@@ -71,8 +71,7 @@ this explificly but @racket[fst-rewrite] wraps this functionallity up nicely.
 
 @(define helper-eval (make-base-eval))
 @interaction-eval[#:eval helper-eval
-                  (require "../main.rkt")
-                  (require "../utils.rkt")]
+                  (require openfst openfst/utils)]
 
 @interaction-eval[
  #:eval helper-eval
@@ -100,7 +99,7 @@ simplifies the solution.
 
 The leading-zero removing transducer is defined as the concatenation of an FST that removes zero
 or more @racket["0"]s and an FST that accepts one or more digits. While the second FST could proccess
-the leading @racket["0"]s without removing them this path will have more weight associated with it. 
+the leading @racket["0"]s without removing them this path will have more weight associated with it.
 
 @racketblock[
  (define leading-0s
@@ -332,7 +331,7 @@ memory. From the perspective of the user, however they conform to the @racket[st
 @defproc[(label? [v any/c]) boolean?]{
  Returns @racket[#true] if the given @racket[v] is suitble for use as an input or
  output lable for an arc. Equivalent to @racket[(or (exact-nonnegative-integer? v) (char? v))]
-} 
+}
 
 @defproc[(arc [ilabel label?] [olable label?] [weight real?]
               [next-state exact-nonnegative-integer?]) arc?]{
