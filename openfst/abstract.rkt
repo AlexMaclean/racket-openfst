@@ -1,14 +1,13 @@
 #lang racket/base
 
-(require "wrapper.rkt" racket/contract racket/match racket/math)
+(require "wrapper.rkt" racket/contract racket/match racket/file racket/port)
 
 (define (fst-like? v)
   (or (string? v) (fst? v)))
 
 (provide/contract
- [fst-write (fst-like? path-string? . -> . void?)]
- [rename Fst-Read fst-read (path-string? . -> . fst?)]
-
+ [fst-save (fst-like? output-port? . -> . void?)]
+ [fst-load (input-port? . -> . fst?)]
  [fst-cross (fst-like? fst-like? . -> . fst?)]
  [fst->string (fst-like? . -> . string?)]
  [fst-shortest-path ((fst-like?) (exact-positive-integer?) . ->* . fst?)]
@@ -56,9 +55,6 @@
 (define (fst-cross fst1 fst2)
   (Fst-Cross (fst-like fst1) (fst-like fst2)))
 
-(define (fst-write fst path)
-  (Fst-Write (fst-like fst) path))
-
 (define (fst-difference fst1 fst2)
   (Fst-Difference (fst-like fst1) (fst-like fst2)))
 
@@ -87,6 +83,20 @@
 
 (define (fst-like arg)
   (if (string? arg) (fst-accept arg) arg))
+
+(define (fst-save fst output-port)
+  (define temp-path (make-temporary-file))
+  (Fst-Write (fst-like fst) temp-path)
+  (copy-port (open-input-file	temp-path) output-port)
+  (delete-file temp-path))
+
+(define (fst-load input-port)
+  (define temp-path (make-temporary-file))
+  (copy-port input-port (open-output-file temp-path #:exists 'update))
+  (define fst (Fst-Read temp-path))
+  (delete-file temp-path)
+  fst)
+
 
 ;; Helper Functions
 ;; ----------------------------------------------------------------------------

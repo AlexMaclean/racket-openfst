@@ -127,6 +127,11 @@ extern "C"
         fst->Write(path);
     }
 
+    DllExport fst::StdMutableFst *Fst_Read(char *path)
+    {
+        return fst::StdVectorFst::Read(path);
+    }
+
     DllExport int Fst_Start(fst::StdFst *fst)
     {
         return fst->Start();
@@ -135,11 +140,6 @@ extern "C"
     DllExport float Fst_Final(fst::StdFst *fst, int state)
     {
         return fst->Final(state).Value();
-    }
-
-    DllExport fst::StdMutableFst *Fst_Read(char *path)
-    {
-        return fst::StdMutableFst::Read(path);
     }
 
     DllExport const SymbolTable *Fst_InputSymbols(fst::StdFst *fst)
@@ -162,7 +162,8 @@ extern "C"
         delete fst;
     }
 
-    DllExport bool Fst_Verify(const fst::StdFst *fst) {
+    DllExport bool Fst_Verify(const fst::StdFst *fst)
+    {
         return Verify(*fst);
     }
 
@@ -287,17 +288,20 @@ extern "C"
         return ofst;
     }
 
-    DllExport fst::StdMutableFst *Fst_Invert(fst::StdMutableFst *fst) {
+    DllExport fst::StdMutableFst *Fst_Invert(fst::StdMutableFst *fst)
+    {
         return new StdVectorFst(StdInvertFst(*fst));
     }
 
-    DllExport fst::StdMutableFst *Fst_Reverse(fst::StdMutableFst *ifst) {
+    DllExport fst::StdMutableFst *Fst_Reverse(fst::StdMutableFst *ifst)
+    {
         StdVectorFst *ofst = new StdVectorFst();
         Reverse(*ifst, ofst);
         return ofst;
     }
 
-    DllExport fst::StdMutableFst *Fst_Optimize(fst::StdMutableFst *ifst) {
+    DllExport fst::StdMutableFst *Fst_Optimize(fst::StdMutableFst *ifst)
+    {
         StdVectorFst *ofst = new StdVectorFst(*ifst);
         RmEpsilon(ofst);
         Minimize(ofst);

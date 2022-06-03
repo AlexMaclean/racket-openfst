@@ -12,7 +12,6 @@
 
     (test-case
      "Simple closure"
-
      (define xor-fst (fst-closure (fst-union (fst-cross "0" "1") (fst-cross "1" "0"))))
 
      (check-equal? (fst-rewrite xor-fst "0101") "1010")
@@ -28,6 +27,19 @@
      (check-equal? (fst-num-states l) 2)
      (check-= (fst-final l 1) 32.0 1e-10)
      (check-equal? (arc-ilabel (first (fst-arcs l 0))) (char->integer #\λ)))
+
+     (test-case
+      "Basic FST I/O"
+      (define xor-fst (fst-closure (fst-union (fst-cross "0" "1") (fst-cross "1" "0"))))
+      (fst-save xor-fst (open-output-file "temp.fst" #:exists 'replace))
+
+      (define xor-copy (fst-load (open-input-file "temp.fst")))
+
+      (check-equal? (fst-num-states xor-fst) (fst-num-states xor-copy))
+      (check-equal? (fst-start xor-fst) (fst-start xor-copy))
+
+      (check-equal? (fst-final xor-fst 0) (fst-final xor-copy 0))
+      (check-equal? (fst-arcs xor-fst 0) (fst-arcs xor-copy 0)))
 
     )
    'verbose)

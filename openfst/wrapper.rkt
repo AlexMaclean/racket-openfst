@@ -82,9 +82,10 @@
 (define-fst Fst-SetFinal  (_fun _Fst _StateId _float -> _void))
 
 (define-fst Fst-Write     (_fun _Fst _path -> _void))
+(define-fst Fst-Read      (_fun _path -> _Fst))
+
 (define-fst Fst-Final     (_fun _Fst _StateId -> _float))
 (define-fst Fst-Start     (_fun _Fst -> _StateId))
-(define-fst Fst-Read      (_fun _path -> _Fst))
 
 (define-fst delete-StringCompiler (_fun _StringCompiler-pointer -> _void))
 (define-fst new-StringCompiler (_fun -> _StringCompiler-pointer))

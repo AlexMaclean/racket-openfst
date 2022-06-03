@@ -20,6 +20,8 @@ lib/tmp
 *.html
 *.js
 
+.vscode/
+
 !openfst-x86_64*/*
 compiled/
 doc/
