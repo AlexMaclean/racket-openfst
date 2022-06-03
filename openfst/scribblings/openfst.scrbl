@@ -20,7 +20,7 @@ A weighted finite-state transducers (FSTs) is a type of automata that consists o
  @item{A set of states, represented by natural numbers. Each state is also assigned a final
   weight representing the weight of terminating computation in this state (Infinity is used to
   represent non-final states).}
- @item{A set of arc (or transtions) between states, consisting of a current and a next state,
+ @item{A set of arc (or transitions) between states, consisting of a current and a next state,
   an input and output label, and a weight}
  @item{A special state designated as the start state, from which computation begins. Empty or
   non-sane FSTs may lack a start state}]
@@ -28,11 +28,11 @@ A weighted finite-state transducers (FSTs) is a type of automata that consists o
 This library provides a high- and low-level for interacting with FSTs. The high-level abstract
 functional interface contains a functions
 over FSTs such as @racket[fst-union] and @racket[fst-compose]. the low-level direct interface
-allows for inspection and stateful muation and of the structure of an FST.
+allows for inspection and stateful mutation and of the structure of an FST.
 
 @subsection{Example: Thousand Separators}
 To better understand what FSTs are and how OpenFST enables their use, we'll performs some
-simple formatting tasks on natrual numbers. First consider the task of adding commas after
+simple formatting tasks on natural numbers. First consider the task of adding commas after
 every third digit as thousand separators, that is:
 @centered{
  @racket["7577130400"] → @racket["7,577,130,400"]
@@ -50,7 +50,7 @@ will accept only strings of exactly 3 digits and rewrite them unchanged.
 Next we add a comma inserting FST before @racket[digits3] and take the Kleene star of this to get
 @racket[digits3*]. The resulting FST will accept a string of digits with length divisible by 3 and
 insert a comma before every 3rd digit. Finally we concatenate this FST with an FST taking 1, 2, or 3
-digits representing the leading digist of the number, to produce @racket[add-commas-fst].
+digits representing the leading digit of the number, to produce @racket[add-commas-fst].
 
 @racketblock[
  (define digits3* (fst-closure (fst-concat (fst-cross "" ",") digits3)))
@@ -58,10 +58,10 @@ digits representing the leading digist of the number, to produce @racket[add-com
                                     digits3*))
  ]
 
-To acctually apply this FST to a string we use @racket[fst-compose] to implicitly convert the
+To actually apply this FST to a string we use @racket[fst-compose] to implicitly convert the
 string to an FST itself and then compose that FST with the one we build for thousand separation.
 Finally we convert the resulting FST back into a string. For the purposes of this example we do
-this explificly but @racket[fst-rewrite] wraps this functionallity up nicely.
+this explicitly but @racket[fst-rewrite] wraps this functionality up nicely.
 
 @racketblock[
  (define (add-commas number-string)
@@ -94,11 +94,11 @@ this explificly but @racket[fst-rewrite] wraps this functionallity up nicely.
 @subsection{Example: Leading Zeros}
 
 To see how weights can be applied to FSTs consider the problem of removing leading zeros from
-a number. While this task can be accopmlished with an unweighted-FST introdcuing weights
+a number. While this task can be accomplished with an unweighted-FST introducing weights
 simplifies the solution.
 
 The leading-zero removing transducer is defined as the concatenation of an FST that removes zero
-or more @racket["0"]s and an FST that accepts one or more digits. While the second FST could proccess
+or more @racket["0"]s and an FST that accepts one or more digits. While the second FST could process
 the leading @racket["0"]s without removing them this path will have more weight associated with it.
 
 @racketblock[
@@ -108,7 +108,7 @@ the leading @racket["0"]s without removing them this path will have more weight 
  ]
 
 Note that this FST can be composed with the thousand separator from the previous problem into a
-single new FST. When applying this FST @racket[fst-shortest-path] must be used since now mutliple
+single new FST. When applying this FST @racket[fst-shortest-path] must be used since now multiple
 computations exist for some strings.
 
 @racketblock[
@@ -247,11 +247,11 @@ computations exist for some strings.
                      (or/c symbol? (list/c symbol? real?))
                      (listof (list/c label? label? real? symbol?)))] ...) fst?]{
  Creates a new finite state transducer given a series of s-expressions representing states.
- The first element in each list is either a sybmol used to refer to the state or a list containting
+ The first element in each list is either a symbol used to refer to the state or a list containing
  the symbol and a final weight to be assigned to this state. Without a weight states receive a weight
- of @racket[+inf.0]. The elements in the list after this are quadruples of arguemnts passed to
+ of @racket[+inf.0]. The elements in the list after this are quadruples of arguments passed to
  @racket[arc]. The first element in the list is assigned the role of start state. Note that the
- symbols used for the states do not presist beyond construction of the FST.
+ symbols used for the states do not persist beyond construction of the FST.
 
  Example:
  @racketblock[
@@ -329,8 +329,8 @@ memory. From the perspective of the user, however they conform to the @racket[st
 }
 
 @defproc[(label? [v any/c]) boolean?]{
- Returns @racket[#true] if the given @racket[v] is suitble for use as an input or
- output lable for an arc. Equivalent to @racket[(or (exact-nonnegative-integer? v) (char? v))]
+ Returns @racket[#true] if the given @racket[v] is suitable for use as an input or
+ output label for an arc. Equivalent to @racket[(or (exact-nonnegative-integer? v) (char? v))]
 }
 
 @defproc[(arc [ilabel label?] [olable label?] [weight real?]

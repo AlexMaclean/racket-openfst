@@ -162,6 +162,10 @@ extern "C"
         delete fst;
     }
 
+    DllExport bool Fst_Verify(const fst::StdFst *fst) {
+        return Verify(*fst);
+    }
+
     // Symbol Table -------------------------------------------------------
 
     DllExport size_t SymbolTable_NumSymbols(const SymbolTable *table)
@@ -273,6 +277,23 @@ extern "C"
     {
         StdVectorFst *ofst = new StdVectorFst(*fst);
         ConcatRange(ofst, lower, upper);
+        return ofst;
+    }
+
+    DllExport fst::StdMutableFst *Fst_Invert(fst::StdMutableFst *fst) {
+        return new StdVectorFst(StdInvertFst(*fst));
+    }
+
+    DllExport fst::StdMutableFst *Fst_Reverse(fst::StdMutableFst *ifst) {
+        StdVectorFst *ofst = new StdVectorFst();
+        Reverse(*ifst, ofst);
+        return ofst;
+    }
+
+    DllExport fst::StdMutableFst *Fst_Optimize(fst::StdMutableFst *ifst) {
+        StdVectorFst *ofst = new StdVectorFst(*ifst);
+        RmEpsilon(ofst);
+        Minimize(ofst);
         return ofst;
     }
 

@@ -102,8 +102,13 @@
 (define-fst Fst-Concat     (_fun _Fst _Fst -> _Fst))
 (define-fst Fst-Difference (_fun _Fst _Fst -> _Fst))
 
+(define-fst Fst-Invert     (_fun _Fst -> _Fst))
+(define-fst Fst-Reverse    (_fun _Fst -> _Fst))
+(define-fst Fst-Optimize   (_fun _Fst -> _Fst))
+
 (define-fst Fst-Project (_fun _Fst _ProjectType -> _Fst))
 (define-fst Fst-Closure (_fun _Fst _int32 _int32 -> _Fst))
+(define-fst Fst-Verify  (_fun _Fst -> _bool))
 
 (define-fst delete-Arc (_fun _Arc -> _void))
 (define-fst new-Arc (_fun _int _int _float _StateId -> _Arc))

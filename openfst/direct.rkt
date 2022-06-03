@@ -27,7 +27,7 @@
  [rename Arc-nextstate arc-next-state (arc? . -> . exact-nonnegative-integer?)]
 
  [arc? (any/c . -> . boolean?)]
- [label (any/c . -> . boolean?)])
+ [label? (any/c . -> . boolean?)])
 
 ;; Functions
 ;; ----------------------------------------------------------------------------

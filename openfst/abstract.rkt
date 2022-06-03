@@ -8,7 +8,7 @@
 (provide/contract
  [fst-write (fst-like? path-string? . -> . void?)]
  [rename Fst-Read fst-read (path-string? . -> . fst?)]
- 
+
  [fst-cross (fst-like? fst-like? . -> . fst?)]
  [fst->string (fst-like? . -> . string?)]
  [fst-shortest-path ((fst-like?) (exact-positive-integer?) . ->* . fst?)]
@@ -20,6 +20,10 @@
                        #:upper (or/c exact-positive-integer? #f)) . ->* . fst?)]
  [fst-difference (fst-like? fst-like? . -> . fst?)]
  [fst-project (fst-like? (or/c 'input 'output) . -> . fst?)]
+ [fst-inverse (fst-like? . -> . fst-like?)]
+ [fst-reverse (fst-like? . -> . fst-like?)]
+ [fst-optimize (fst-like? . -> . fst-like?)]
+ [fst-sane? (fst-like? . -> . boolean?)]
 
  [fst-like? (any/c . -> . boolean?)]
  [fst? (any/c . -> . boolean?)])
@@ -68,6 +72,18 @@
   (when (and upper (lower . > . upper))
     (error 'fst-closure "lower bound ~e is greater than upper bound ~e" lower upper))
   (Fst-Closure (fst-like fst) lower (or upper 0)))
+
+(define (fst-inverse fst)
+  (Fst-Invert (fst-like fst)))
+
+(define (fst-reverse fst)
+  (Fst-Reverse (fst-like fst)))
+
+(define (fst-optimize fst)
+  (Fst-Optimize (fst-like fst)))
+
+(define (fst-sane? fst)
+  (Fst-Verify (fst-like fst)))
 
 (define (fst-like arg)
   (if (string? arg) (fst-accept arg) arg))
