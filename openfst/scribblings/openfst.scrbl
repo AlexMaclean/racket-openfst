@@ -9,8 +9,8 @@
 @defmodule[openfst]
 
 This package provides Racket bindings for OpenFst, "a library for constructing, combining,
-optimizing, and searching @italic{weighted finite-state transducers} (FSTs)" @cite["openfst"]. We also
-provide extensions to OpenFst based on the Python package @tt{pynini} @cite["pynini"].
+optimizing, and searching @italic{weighted finite-state transducers} (FSTs)" @cite["openfst"].
+Extensions to OpenFst based on the Python package @tt{pynini} are also included @cite["pynini"].
 
 @section{Getting Started}
 
@@ -21,7 +21,8 @@ A weighted finite-state transducers (FSTs) is a type of automata that consists o
   weight representing the weight of terminating computation in this state (Infinity is used to
   represent non-final states).}
  @item{A set of arcs (or transitions) between states, consisting of a current and a next state,
-  an input and output label, and a weight.}
+  an input and output label, and a weight. labels are integers representing the unicode encoding
+ of characters with 0 represinging ε, or no-character.}
  @item{A special state designated as the start state, from which computation begins. Empty or
   non-sane FSTs may lack a start state.}]
 
@@ -47,7 +48,7 @@ will accept only strings of exactly 3 digits and rewrite them unchanged.
  (define digits3 (fst-closure digit #:lower 3 #:upper 3))
  ]
 
-Next we add a comma inserting FST before @racket[digits3] and take the Kleene star of this to get
+Next we add a comma inserting FST before @racket[digits3] and take the Kleene @tt{*} of this to get
 @racket[digits3*]. The resulting FST will accept a string of digits with length divisible by 3 and
 insert a comma before every 3rd digit. Finally we concatenate this FST with an FST taking 1, 2, or 3
 digits representing the leading digit of the number, to produce @racket[add-commas-fst].
@@ -99,6 +100,10 @@ To see how weights can be applied to FSTs, consider the problem of removing lead
 a number. While this task can be accomplished with an unweighted-FST, introducing weights
 simplifies the solution.
 
+@centered{
+ @racket["007"] → @racket["7"]
+}
+
 The leading-zero removing transducer is defined as the concatenation of an FST that removes zero
 or more @racket["0"]s and an FST that accepts one or more digits. While the second FST could process
 the leading @racket["0"]s without removing them, this path will have more weight associated with it.
@@ -146,12 +151,12 @@ computations exist for some strings.
 @section{Abstract Automata Manipulation}
 
 @defproc[(fst? [v any/c]) boolean?]{
- Returns @racket[#true] if the given @racket[v] is a finite-state transducer. Nearly all of the
- following functions accept FST-like arguments and convert strings to FSTs with @racket[fst-accept].
+ Returns @racket[#true] if the given @racket[v] is a finite-state transducer. 
 }
 
 @defproc[(fst-like? [v any/c]) boolean?]{
- Returns @racket[(or (string? v) (fst? v))].
+ Returns @racket[(or (string? v) (fst? v))]. Nearly all of the
+ following functions accept FST-like arguments and convert strings to FSTs with @racket[fst-accept].
 }
 
 @defproc[(fst-accept [str string?] [#:weight weight real? 0]) fst?]{
@@ -301,7 +306,7 @@ arcs.
  Creates a new FST equivalent to @racket[fst], except that every path through
  the FST has @racket[weight] added to it.
 
- This is accomplished by adding an "ε" transition to the start of @racket[fst] with the given
+ This is accomplished by adding an ε transition to the start of @racket[fst] with the given
  @racket[weight].
 }
 
@@ -312,7 +317,7 @@ arcs.
  applied to the resulting FST.
 
  This function has the effect of replacing the input-label of every arc in the input
- FST with "ε".
+ FST with ε.
 }
 
 @defproc[(fst-delete [fst fst-like?] [#:weight weight real? 0]) fst?]{
@@ -322,7 +327,7 @@ arcs.
  applied to the resulting FST.
 
  This function has the effect of replacing the output-label of every arc in the input
- FST with "ε".
+ FST with ε.
 }
 
 @defproc[(fst-join [exp fst-like?] [sep fst-like?]) fst?]{
@@ -449,6 +454,15 @@ memory. From the perspective of the user, however they conform to the @racket[st
 
 }
 
+@section{Limitations}
+
+This library currently only supports @tt{x86_64} architecture. Getting it working on different
+hardware @italic{should} be as simple as running the build script corresponding to the OS
+in the @tt{lib/} directory of the GitHub Repo, but I haven't tested this...
+
+While it should not be visible to the consumers of this library, the Windows implemenation of
+this library is using an unoffical port of OpenFST @cite["winfst"] Because the offical OpenFST
+distrobution does not support Windows. 
 
 @bibliography[
  @bib-entry[#:key "pynini"

@@ -18,7 +18,18 @@
      (check-equal? (fst-rewrite xor-fst "0101") "1010")
      (check-equal? (fst-rewrite xor-fst "") "")
      (check-equal? (fst-rewrite xor-fst "1011000") "0100111")
-     (check-equal? (fst-rewrite xor-fst "bogus") #f)))
+     (check-equal? (fst-rewrite xor-fst "bogus") #f))
+
+    (test-case
+    "String Conversion with unicode"
+    (define l (fst-accept "λ" #:weight 32))
+
+    (check-equal? (fst->string l) "λ")
+    (check-equal? (fst-num-states l) 2)
+    (check-= (fst-final l 1) 32.0 1e-10)
+    (check-equal? (arc-ilabel (first (fst-arcs l 0))) (char->integer #\λ)))
+
+    )
    'verbose)
   (void))
 
