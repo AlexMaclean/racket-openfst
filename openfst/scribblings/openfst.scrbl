@@ -22,7 +22,7 @@ A weighted finite-state transducers (FSTs) is a type of automata that consists o
   represent non-final states).}
  @item{A set of arcs (or transitions) between states, consisting of a current and a next state,
   an input and output label, and a weight. labels are integers representing the unicode encoding
- of characters with 0 representing ε, or no-character.}
+  of characters with 0 representing ε, or no-character.}
  @item{A special state designated as the start state, from which computation begins. Empty or
   non-sane FSTs may lack a start state.}]
 
@@ -256,7 +256,7 @@ computations exist for some strings.
  Creates a new FST that has opposite input and output languages as the given @racket[fst]. This is
  accomplished by switching the input and output labels on every arc.
 
-  @examples[
+ @examples[
  #:eval helper-eval
  (define f (fst-inverse (fst-cross "hello" "world")))
  (fst-rewrite f "world")
@@ -275,15 +275,15 @@ computations exist for some strings.
 }
 
 @defproc[(fst-optimize [fst fst-like?]) fst?]{
-Creates a new FST with the same effect as the provided FST but possibly with fewer states and
-arcs.
+ Creates a new FST with the same effect as the provided FST but possibly with fewer states and
+ arcs.
 }
 
 @defproc[(fst-difference [fst1 fst-like?] [fst2 fst-like?]) fst?]{
  Create an FST acceptor that accepts all strings accepted by @racket[fst1], except those accepted
  by @racket[fst2]. Both input FSTs must be acceptors.
 
-  @examples[
+ @examples[
  #:eval helper-eval
  (define f (fst-difference (fst-union "a" "b" "c") "c"))
  (fst-rewrite f "a")
