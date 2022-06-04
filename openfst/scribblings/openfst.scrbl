@@ -26,10 +26,10 @@ A weighted finite-state transducers (FSTs) is a type of automata that consists o
  @item{A special state designated as the start state, from which computation begins. Empty or
   non-sane FSTs may lack a start state.}]
 
-This library provides a high- and low-level for interacting with FSTs. The high-level abstract
+This library provides a high- and low-level interface for interacting with FSTs. The high-level abstract
 functional interface contains functions
 over FSTs such as @racket[fst-union] and @racket[fst-compose]. The low-level direct interface
-allows for inspection and stateful mutation and of the structure of an FST.
+allows for inspection and stateful mutation of the structure of an FST.
 
 @subsection{Example: Thousand Separators}
 To better understand what FSTs are and how OpenFST enables their use, we'll performs some
@@ -217,7 +217,7 @@ computations exist for some strings.
 }
 
 @defproc[(fst-concat [fst fst-like?] ...+) fst?]{
- Construct a new FST that transducer strings that are a concatenation of the strings of the input
+ Construct a new FST that transduces strings that are a concatenation of the strings of the input
  FSTs.
 
  @examples[
@@ -247,7 +247,7 @@ computations exist for some strings.
 }
 
 @defproc[(fst->string [fst fst-like?]) string?]{
- If there is only one possible path through the given FST produces a string by walking
+ If there is only one possible path through the given FST, produces a string by walking
  this path and adding all output-labels to a string. If there
  are multiple paths an error is printed and @racket[""] is returned.
 }
@@ -293,7 +293,7 @@ computations exist for some strings.
 
 
 @defproc[(fst-sane? [fst fst-like?]) boolean?]{
- Performs a sanity check on the given FST returning @racket[#true] if all arc point to valid
+ Performs a sanity check on the given FST returning @racket[#true] if all arcs point to valid
  states and there is a start state for non-empty FSTs.
 }
 
@@ -331,11 +331,11 @@ computations exist for some strings.
 }
 
 @defproc[(fst-join [exp fst-like?] [sep fst-like?]) fst?]{
- Create a new FST that is equivalent to @italic{(<@racket[exp]> (<@racket[sep]> <@racket[exp]>)*)
+ Creates a new FST that is equivalent to @italic{(<@racket[exp]> (<@racket[sep]> <@racket[exp]>)*)
 }}
 
 @defproc[(fst-rewrite [fst fst-like?] [input string?]) (or/c string #f)]{
- rewrites the given input string with the given FST. If the FST cannot accept @racket[input] then
+ Rewrites the given input string with the given FST. If the FST cannot accept @racket[input] then
  @racket[#f] is returned, otherwise the rewritten string is returned. If the FST can accept the
  input string this is equivalent to:
  @racketblock[
@@ -353,7 +353,7 @@ computations exist for some strings.
                      (listof (list/c label? label? real? symbol?)))] ...) fst?]{
  Creates a new finite state transducer given a series of s-expressions representing states.
  The first element in each list is either a symbol used to refer to the state or a list containing
- the symbol and a final weight to be assigned to this state. Without a weight states receive a weight
+ the symbol and a final weight to be assigned to this state. Without a weight, states receive a weight
  of @racket[+inf.0]. The elements in the list after this are quadruples of arguments passed to
  @racket[arc]. The first element in the list is assigned the role of start state. Note that the
  symbols used for the states do not persist beyond construction of the FST.
@@ -368,7 +368,7 @@ computations exist for some strings.
 }
 
 @defproc[(fst-add-state! [fst fst?]) exact-nonnegative-integer?]{
- Mutate the given @racket[fst] adding a new state and returns that state's id. Generally states
+ Mutates the given @racket[fst] adding a new state and returns that state's id. Generally states
  start at 0 and increase sequentially, but probably not a good idea to count on this.
 }
 
@@ -422,7 +422,7 @@ computations exist for some strings.
 
 @subsection{Transition Arcs}
 
-Arcs represented transitions between states in an finite-state transducer. Each arc consists of a
+Arcs represent transitions between states in an finite-state transducer. Each arc consists of a
 in-label, an out-label, a weight, and a next state. Arcs are added to the automata at the states
 from which they originate.
 
@@ -435,7 +435,7 @@ memory. From the perspective of the user, however they conform to the @racket[st
 
 @defproc[(label? [v any/c]) boolean?]{
  Returns @racket[#true] if the given @racket[v] is suitable for use as an input or
- output label for an arc. Equivalent to @racket[(or (exact-nonnegative-integer? v) (char? v))]
+ output label for an arc. Equivalent to @racket[(or (exact-nonnegative-integer? v) (char? v))].
 }
 
 @defproc[(arc [ilabel label?] [olable label?] [weight real?]
@@ -449,7 +449,7 @@ memory. From the perspective of the user, however they conform to the @racket[st
    @defproc[(arc-weight (arc arc?)) real?]
    @defproc[(arc-next-state (arc arc?)) exact-nonnegative-integer?])]{
  Accessor methods for an arc object. Note that even when arcs are constructed with character
- labels these values are represented internal as integers so @racket[arc-ilabel] and
+ labels these values are represented internally as integers so @racket[arc-ilabel] and
  @racket[arc-olabel] will return the corresponding integer.
 
 }
@@ -461,7 +461,7 @@ hardware @italic{should} be as simple as running the build script corresponding 
 in the @tt{lib/} directory of the GitHub Repo, but I haven't tested this...
 
 While it should not be visible to the consumers of this library, the Windows implementation of
-this library is using an unofficial port of OpenFST @cite["winfst"] Because the official OpenFST
+this library is using an unofficial port of OpenFST @cite["winfst"] because the official OpenFST
 distribution does not support Windows.
 
 @bibliography[
