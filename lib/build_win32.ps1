@@ -1,7 +1,7 @@
 Remove-Item -Recurse -Force .\temp
 
-mkdir .\temp
-Set-Location .\temp
+mkdir .\tmp
+Set-Location .\tmp
 
 git clone https://github.com/kkm000/openfst.git
 
