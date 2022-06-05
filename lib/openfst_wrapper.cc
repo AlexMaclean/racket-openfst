@@ -269,7 +269,7 @@ extern "C"
 
     DllExport fst::StdMutableFst *Fst_Difference(fst::StdMutableFst *ifst1, fst::StdMutableFst *ifst2)
     {
-        fst::StdVectorFst fst2;
+        fst::StdVectorFst fst2 = StdVectorFst(*ifst2);
         fst::StdVectorFst ofst2;
         RmEpsilon(&fst2);
         Determinize(fst2, &ofst2);
