@@ -25,5 +25,5 @@ dumpbin /exports .\openfst_wrapper.dll
 ### Mac OS X
 
 ```BASH
-
+otool -L openfst_wrapper.dylib
 ```
