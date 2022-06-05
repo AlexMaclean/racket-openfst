@@ -26,8 +26,8 @@ A weighted finite-state transducers (FSTs) is a type of automata that consists o
  @item{A special state designated as the start state, from which computation begins. Empty or
   non-sane FSTs may lack a start state.}]
 
-This library provides a high- and low-level interface for interacting with FSTs. The high-level abstract
-functional interface contains functions
+This library provides a high- and low-level interface for interacting with FSTs. The high-level
+abstract functional interface contains functions
 over FSTs such as @racket[fst-union] and @racket[fst-compose]. The low-level direct interface
 allows for inspection and stateful mutation of the structure of an FST.
 
@@ -295,6 +295,22 @@ computations exist for some strings.
 @defproc[(fst-sane? [fst fst-like?]) boolean?]{
  Performs a sanity check on the given FST returning @racket[#true] if all arcs point to valid
  states and there is a start state for non-empty FSTs.
+}
+
+
+@subsection{File I/O}
+
+Because of the limiations of the interfaces between Racket, C, and C++ these functions work
+by creating a named temporary file and passing the name of this file to the underlying C++
+implementation. This should not be apparent to users of the library, but this approach has
+not been fully tested on all systems.
+
+@defproc[(fst-save [fst fst-like?] [port output-port?]) void?]{
+ Write a binary reperesentation to the given port.
+}
+
+@defproc[(fst-load [port input-port?]) fst?]{
+ Read an FST written by @racket[fst-save] returning the FST.
 }
 
 
