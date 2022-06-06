@@ -32,7 +32,7 @@ over FSTs such as @racket[fst-union] and @racket[fst-compose]. The low-level dir
 allows for inspection and stateful mutation of the structure of an FST.
 
 @subsection{Example: Thousand Separators}
-To better understand what FSTs are and how OpenFST enables their use, we'll performs some
+To better understand what FSTs are and how OpenFST enables their use, we'll perform some
 simple formatting tasks on natural numbers. First consider the task of adding commas after
 every third digit as thousand separators, that is:
 @centered{
